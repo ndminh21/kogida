@@ -1,0 +1,82 @@
+extends ../../layout/home/index_white
+
+block content
+    .search-section
+        .container
+            h1 Khảo sát và vẽ đồ thị hàm số
+    .container
+        .row
+            .col-md-3.sticky
+                aside.main-sidebar
+                    div
+                        section.sidebar.p-t-b-40
+                            ul.sidebar-menu.scroll
+                                li
+                                    a(href="/khao-sat-ham-so")
+                                        i.icon.icon-circle-o.text-aqua
+                                        span Khảo sát và vẽ đồ thị hàm số
+                                li
+                                    a(href="/ve-do-thi-ham-so-bat-ki")
+                                        i.icon.icon-circle-o.text-aqua
+                                        span Vẽ đồ thị hàm số bất kỳ
+                                li
+                                    a(href="/huong-dan-su-dung-ve-do-thi")
+                                        i.icon.icon-circle-o.text-aqua
+                                        span Hướng dẫn sử dụng chức năng
+            article.col-md-9.p-b-40.b-l.p-40
+                section
+                    .row
+                        .col-md-12
+                            h2 
+                                i.icon.icon-functions
+                                | Hàm số cần vẽ
+                            hr
+                            .text-center
+                                #MathInput.math-display
+                                    if (functionTex === null)
+                                        | $$y = f(x) =$$
+                                    else
+                                        | $$y = f(x) = #{functionTex}$$
+                            .math-display-result.pl-5
+                                ul.list-for-display
+                                    li Miền giá trị của x:
+                                        .math-input(data-name="xmin", data-tex=xmin)
+                                            | \( x_{min} = #{xmin} \)
+                                        .math-input(data-name="xmax", data-tex=xmax)
+                                            | \( x_{max} = #{xmax} \)
+                                    li Miền giá trị của y:
+                                        .math-input(data-name="ymin", data-tex=ymin)
+                                            | \( y_{min} = #{ymin} \)
+                                        .math-input(data-name="ymax", data-tex=ymax)
+                                            | \( y_{max} = #{ymax} \) 
+                            .text-center
+                                button.btn.btn-primary#draw(type=button, data-tex=(functionTex == null ? "" : functionTex)) Vẽ đồ thị hàm số trên miền đã nhập
+                section.p-t-b-20
+                    .row
+                        .col-md-12
+                            h2
+                                i.icon.icon-wallet
+                                span.pl-2 Hình vẽ đồ thị
+                            hr
+                            if functionTex != null
+                                if (message == "invalidrange")
+                                    .math-display-result
+                                        strong Kogida
+                                        | không thể vẽ được đồ thị hàm số vì miền cần vẽ không đúng.
+                                else if (message == "nosupport")
+                                    .math-display-result
+                                        strong Kogida 
+                                        | không thể vẽ được đồ thị hàm số vì bạn đã nhập sai định dạng hàm số hoặc chúng tôi chưa hỗ trợ vẽ hàm số trên.
+                                    .math-display-result
+                                        | Xin lỗi về sự bất tiện này.
+                                    
+                                else
+                                    .text-center.p-t-20.p-b-10
+                                        img.img-responsive#diagram(src="dist/layout/home/img/basic/loading.gif", alt="Đồ thị hàm số " + functionTex, width="80")
+block style
+    link(rel="stylesheet", href="dist/pages/function-draw/style/index.min.css")
+block script
+    script(src="components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="/dist/pages/function-draw/script/index.min.js")
+
+

@@ -1,0 +1,159 @@
+extends ../../layout/dashboard/index
+
+block content-header
+    h1 Quản lý các chức năng của hệ thống
+    ol.breadcrumb
+        li
+            a(href="/trang-chinh")
+                i.fa.fa-dashboard
+                | Trang chính
+        li.active Quản lý chức năng
+block content
+    .row
+        .col-md-4
+            .box.box-danger
+                .box-header.with-border
+                    h3.box-title Cập nhật chức năng
+                form(role="form", action="/cap-nhat-chuc-nang", method="post")
+                    .box-body
+                        if (message_function.length > 0)
+                            .row
+                                .col-md-12
+                                    .alert.alert-danger
+                                        h4
+                                            i.icon.fa.fa-ban
+                                            | Cảnh báo lỗi!
+                                        p= message_function
+                        .row
+                            .col-md-12
+                                .form-group
+                                    label(for="input-functionid") Các chức năng hiện có
+                                    select#input-functionid.select2.form-control(name="function[FId]", style="width: 100%;")
+                                        option(value="-1", selected) Chọn vào đây để thêm mới
+                                        each func in functionList 
+                                            option(value=func.FId)= func.FName
+                        .row
+                            .col-md-12
+                                .form-group
+                                    label(for="input-functionname") Tên chức năng (mới)
+                                    input#input-functionname.form-control(type="text", name="function[FName]")
+                        .row
+                            .col-md-12
+                                .form-group
+                                    label(for="input-functionurl") Đường dẫn chức năng
+                                    input#input-functionurl.form-control(type="text", name="function[FUrl]")
+                        .row
+                            .col-md-12
+                                .form-group
+                                    label(for="input-functionmethod") Phương thức sử dụng
+                                    select#input-functionmethod.form-control(name="function[FMethod]", style="width: 100%;")
+                                        option(value="get", selected) GET
+                                        option(value="post") POST
+                                        option(value="put") PUT
+                                        option(value="delete") DELETE
+                        .row
+                            .col-md-12
+                                .form-group
+                                    label(for="input-functiondisplay") Hiển thị trên thanh công cụ
+                                    select#input-functiondisplay.form-control(name="function[FDisplay]", style="width: 100%;")
+                                        option(value="1", selected) Có
+                                        option(value="0") Không
+                        .row
+                            .col-md-12
+                                .form-group
+                                    label(for="input-gfid") Thuộc cụm chức năng
+                                    select#input-gfid.select2.form-control(name="function[GFId]", style="width: 100%;")
+                                        each gf, index in gfList
+                                            option(value=gf.GFId, selected=(index == 0))= gf.GFName
+                    .box-footer
+                        .row.text-center
+                            .col-md-6
+                                button.btn.btn-primary(type="submit") Cập nhật
+                            .col-md-6    
+                                a#deleteFuncBtn.btn.btn-danger(href="/xoa-chuc-nang?id=-1") Xóa chức năng
+        .col-md-8
+            .box.box-primary
+                .box-header.with-border
+                    h3.box-title Thông tin về chức năng
+                .box-body
+                    table.table.table-hover.table-striped
+                        thead
+                            tr
+                                th Mã CN
+                                th Tên chức năng
+                                th Đường dẫn
+                                th Phương thức
+                                th Hiển thị
+                                th Thuộc cụm
+                        tbody
+                            each func in functionList
+                                tr
+                                    td= func.FId
+                                    td= func.FName
+                                    td= func.FUrl
+                                    td= func.FMethod
+                                    td= (func.FDisplay) ? "Có" : "Không"
+                                    td= func.GFunction.GFName
+    .row
+        .col-md-4
+            .box.box-danger
+                .box-header.with-border
+                    h3.box-title Cập nhật cụm chức năng
+                form(action="/cap-nhat-cum-chuc-nang", method="post")
+                    .box-body
+                        if (message_gf.length > 0)
+                            .row
+                                .col-md-12
+                                    .alert.alert-danger
+                                        h4
+                                            i.icon.fa.fa-ban
+                                            | Cảnh báo lỗi!
+                                        p= message_gf
+                        .row
+                            .col-md-12
+                                .form-group
+                                    label(for="input-gfid") Các cụm chức năng hiện có
+                                    select#input-gfid.select2.form-control(name="gf[GFId]", style="width: 100%;")
+                                        option(value="-1", selected) Chọn vào đây để thêm mới
+                                        each gf, index in gfList 
+                                            option(value=gf.GFId)= gf.GFName
+                        .row
+                            .col-md-12
+                                .form-group
+                                    label(for="input-gfname") Tên cụm chức năng (mới)
+                                    input#input-gfname.form-control(type="text", name="gf[GFName]", style="width: 100%;")
+                    .box-footer
+                        .row.text-center
+                            .col-md-6
+                                button.btn.btn-primary(type="submit") Cập nhật
+                            .col-md-6    
+                                a#deleteGFuncBtn.btn.btn-danger(href="/xoa-cum-chuc-nang?id=-1") Xóa cụm
+
+        .col-md-8
+            .box.box-primary
+                .box-header.with-border
+                    h3.box-title Thông tin về cụm chức năng
+                .box-body
+                    table.table.table-striped.table-hover
+                        thead
+                            tr
+                                th Mã cụm
+                                th Tên cụm chức năng
+                                th Số lượng chức năng
+                        tbody
+                            each gf in gfList
+                                tr
+                                    td= gf.GFId
+                                    td= gf.GFName
+                                    td= gf.FunctionList.length
+
+block style
+    link(rel="stylesheet", href="/components/select2/dist/css/select2.min.css")
+    link(rel="stylesheet", href="/components/datatables.net-bs/css/dataTables.bootstrap.min.css")
+
+block script
+    script(src="/components/datatables.net/js/jquery.dataTables.min.js")
+    script(src="/components/datatables.net-bs/js/dataTables.bootstrap.min.js")
+    script(src="/components/select2/dist/js/select2.full.min.js")
+    script(src="/components/select2/dist/js/i18n/vi.js")
+    script(src="/dist/pages/function/script/index.min.js")

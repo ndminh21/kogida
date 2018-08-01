@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+html(lang="vi")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    block meta
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Roboto")
+    link(rel="stylesheet", href="/dist/layout/home/style/index.css")
+    block style
+  body
+    #loader.loader
+      .plane-container
+        img(src="/dist/layout/home/img/basic/loading.svg", alt="Loading...")
+    #app.paper-loading
+      block content
+    script(src="/dist/layout/home/script/index.js")
+    block script

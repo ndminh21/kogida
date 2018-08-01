@@ -1,0 +1,79 @@
+extends ../../layout/dashboard/index
+
+block content-header
+    h1 Thông tin về bài tập
+    ol.breadcrumb
+        li
+            a(href="#")
+                i.fa.fa-dashboard
+                | Quản lý bài tập
+        li.active Thông tin về bài tập
+
+block content
+    .row
+        .col-md-12
+            .box.box-primary
+                .box-header.with-border
+                    h3.box-title Tìm kiếm theo nội dung
+                .box-body
+                    form(action="/admin/tim-kiem-bai-tap", method="get")
+                        .row
+                            .col-md-12
+                                .form-group
+                                    label(for="input-content") Nội dung tìm kiếm (*)
+                                    input.form-control#input-content(type="text", name="content", autofocus, required)
+                        .row
+                            .col-md-6
+                                .form-group
+                                    label(for="input-gradeSubjectId") Chọn khối/ lớp - môn học
+                                    select#input-gradeSubjectId.select2.form-control(style="width: 100%;")
+                                        option(value="-1", selected) Chọn khối/ lớp - môn học
+                                        each gradeSubject in gradeSubjectList
+                                            option(value=gradeSubject.Id)= gradeSubject.grade.GradeName + " - " + gradeSubject.subject.SubjectName 
+                            .col-md-6
+                                .form-group
+                                    label(for="input-chapterid") Chọn chương
+                                    select#input-chapterid.select2.form-control(style="width: 100%;", name="chapterid")
+                            .col-md-12.text-center
+                                button.btn.btn-primary(type="submit") Tìm kiếm
+    if (search == true)
+        .row
+            .col-md-12
+                .box.box-info
+                    .box-header.with-border
+                        h3.box-title Kết quả tìm kiếm
+                    .box-body
+                        ul.timeline
+                            each exercise, value in searchResult
+                                li
+                                    i.fa.fa-question.bg-blue
+                                    .timeline-item
+                                        span.time
+                                            i.fa.fa-clock-o
+                                            | #{" " + moment(exercise.CreatedAt).fromNow()}
+                                        h3.timeline-header
+                                            a(href="#")= exercise.CreatedUser.FamilyName + " " + exercise.CreatedUser.GivenName + " "
+                                            | đã đăng bài tập này
+                                        .timeline-body!= exercise.Content
+                                        .timeline-footer
+                                            a.btn.btn-primary.btn-xs(href="/them-bai-giai?mabaitap=" + exercise.ExerciseId) Thêm bài giải
+                                            a.btn.btn-info.btn-xs(href="/sua-de-bai?mabaitap=" + exercise.ExerciseId) Sửa đề bài
+                                            a.btn.btn-warning.btn-xs(href="/ngung-phat-hanh?mabaitap=" + exercise.ExerciseId) #{!exercise.IsPublished ? "Phát hành" : "Ngưng phát hành"}
+                                            a.btn.btn-info.btn-xs(href="/quan-ly-bai-giai?mabaitap=" + exercise.ExerciseId) Quản lý bài giải
+block style
+    link(rel="stylesheet", href="/components/select2/dist/css/select2.min.css")
+    link(rel="stylesheet", href="/components/datatables.net-bs/css/dataTables.bootstrap.min.css")
+    link(rel="stylesheet", href="/components/datatables.net/extensions/buttons/css/buttons.bootstrap.min.css")
+    link(rel="stylesheet", href="/dist/pages/unit/style/index.min.css")
+
+block script
+    script(src="/components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="/components/datatables.net/js/jquery.dataTables.min.js")
+    script(src="/components/datatables.net-bs/js/dataTables.bootstrap.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/dataTables.buttons.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/buttons.bootstrap.min.js")
+    script(src="/components/ckeditor/ckeditor.js")
+    script(src="/components/bootbox/bootbox.min.js")
+    script(src="/components/select2/dist/js/select2.full.min.js")
+    script(src="/components/select2/dist/js/i18n/vi.js")
+    script(src="/dist/pages/admin-exercise/script/index.min.js")

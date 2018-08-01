@@ -1,0 +1,76 @@
+extends ../../layout/home/index_blue
+
+block content
+    section.solver-area
+        .container-fluid.text-black
+            .row
+                .col-md-6.left-side-input.text-center
+                    h3.font-weight-bold Giải phương trình, hệ phương trình
+                    p.font-italic Nhập đề bài cần giải bằng cách ấn vào khung bên dưới nhé!
+                    .col-md-8.mx-auto
+                        #InputBox
+                            #MathInput
+                                | $$ #{tex} $$
+                    a.btn.btn-outline-primary#solve-button(href="#") Giải bài này
+                .col-md-6
+                    if (input === "eq")
+                        each value, index in result
+                            if (index === 0)
+                                p.math-result
+                                    | \( #{value.substring(3)} \)
+                            else
+                                if (value.indexOf("noroot;") >= 0)
+                                    | Phương trình đã cho vô nghiệm.
+                                else 
+                                    p.math-result
+                                        | \( \Leftrightarrow #{value.substring(3).split("eq;").join("")} \)
+                    else if (input === "ineq")
+                        - var indexToFunctionFx = result.map((x) => x.indexOf("ineq;")).lastIndexOf(0) 
+                        each value, index in result
+                            if (index === 0)
+                                p.math-result
+                                    | Giải bất phương trình:  
+                                    | \( #{value.split("ineq;").join("").split("eq;").join("").split("or;").join("")} \)
+                            else if (index === (indexToFunctionFx + 1))
+                                p.math-result
+                                    | Ta có: 
+                                    | \( f(#{variable}) = #{value.split("ineq;").join("").split("eq;").join("").split("or;").join("")} \)
+                            else
+                                if (value.indexOf("image;") === 0)
+                                    p.math-result
+                                        | Bảng xét dấu:
+                                    .text-center
+                                        img.img-responsive(src="data:image/png;base64," + value.substring(6), alt="Bảng xét dấu")
+                                else if (value.indexOf("noroot;") >= 0)
+                                    p.math-result
+                                        | Phương trình trên vô nghiệm.
+                                else 
+                                    p.math-result
+                                        | \( \Leftrightarrow #{value.split("ineq;").join("").split("eq;").join("").split("or;").join("")} \)
+                        p.math-result
+                            | Vậy nghiệm của bất phương trình đã cho là: 
+                        p.math-result 
+                            if (neccessaryToClear === true)
+                                | \[ S_#{variable} = #{rootset.substring(6).substring(0, rootset.length - 13)} \]
+                            else
+                                | \[ S_#{variable} = #{rootset} \]
+                    else if (input === "eqsys")
+                        each value, index in result
+                            if (index === 0)
+                                p.math-result
+                                    | Giải hệ phương trình: 
+                                    | \( #{value.tex} \)
+                            else
+                                if (value.tex.indexOf("noroot;") >= 0)
+                                    p.math-result
+                                        | Phương trình trên vô nghiệm
+                                else 
+                                    p.math-result
+                                        | \( \Leftrightarrow #{value.tex} \)
+                    
+block style
+    link(rel="stylesheet", href="dist/pages/solution/style/index.min.css")
+
+block script
+    script(src="components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="dist/pages/solution/script/index.min.js")

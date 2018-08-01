@@ -1,0 +1,66 @@
+extends ../../layout/dashboard/index
+
+block content-header
+    h1 Quản lý đề thi
+    ol.breadcrumb
+        li
+            a(href="#")
+                i.fa.fa-dashboard
+                | Quản lý thi thử
+        li.active Quản lý đề thi
+
+block content
+    .row
+        .col-md-12
+            .box.box-primary
+                .box-header.with-border
+                    h3.box-title Danh sách các đề thi đã tạo
+                .box-body
+                    table.table.table-responsive
+                        thead
+                            tr
+                                th Mã đề thi
+                                th Tên đề thi
+                                th SLCH nhập
+                                th SLCH thi
+                                th Ngày tạo
+                                th Thao tác
+                        tbody
+                            each exam, index in examList
+                                - var Structure = JSON.parse(exam.Structure)
+                                tr
+                                    td.text-center= exam.ExamId
+                                    td= exam.ExamName
+                                    td.text-center= Structure.QuestionNumberInput
+                                    td.text-center= Structure.QuestionNumber
+                                    td.text-center= moment(exam.CreatedAt).format("DD/MM/YYYY HH:mm")
+                                    td.text-center
+                                        a.btn.btn-sm.btn-info(href="/admin/tao-thi-thu-chung/buoc-2?makythi=" + exam.ExamId,) Sửa
+                                        a.btn.btn-sm.btn-warning(href="/admin/dieu-chinh-phat-hanh-thi-thu?makythi=" + exam.ExamId,style="margin-left: 5px;") #{exam.IsPublished ? "Ngưng phát hành" : "Phát hành"}
+                    
+                        
+block style
+    link(rel="stylesheet", href="/components/select2/dist/css/select2.min.css")
+    link(rel="stylesheet", href="/components/sweetalert2/dist/sweetalert2.min.css")
+    link(rel="stylesheet", href="/components/datatables.net-bs/css/dataTables.bootstrap.min.css")
+    link(rel="stylesheet", href="/components/datatables.net/extensions/buttons/css/buttons.bootstrap.min.css")
+    link(rel="stylesheet", href="/components/timepicker/bootstrap-timepicker.min.css")
+    link(rel="stylesheet", href="/dist/pages/admin-exam-general/style/index.min.css")
+
+block script
+    script(src="/components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="/components/datatables.net/js/jquery.dataTables.min.js")
+    script(src="/components/datatables.net-bs/js/dataTables.bootstrap.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/dataTables.buttons.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/buttons.bootstrap.min.js")
+    script(src="/components/moment/min/moment.min.js")
+    script(src="/components/select2/dist/js/select2.full.min.js")
+    script(src="/components/select2/dist/js/i18n/vi.js")
+    script(src="/components/input-mask/jquery.inputmask.js")
+    script(src="/components/input-mask/jquery.inputmask.date.extensions.js")
+    script(src="/components/input-mask/jquery.inputmask.extensions.js")
+    script(src="/components/timepicker/bootstrap-timepicker.min.js")
+    script(src="/components/ckeditor/ckeditor.js")
+
+    script(src="/components/sweetalert2/dist/sweetalert2.min.js")
+    script(src="/dist/pages/admin-my-exam/script/index.min.js")

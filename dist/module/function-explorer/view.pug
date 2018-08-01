@@ -1,0 +1,311 @@
+extends ../../layout/home/index_white
+
+block content
+    .search-section
+        .container
+            h1 Khảo sát và vẽ đồ thị hàm số
+    .container
+        .row
+            .col-md-3.sticky
+                aside.main-sidebar
+                    div
+                        section.sidebar.p-t-b-40
+                            ul.sidebar-menu.scroll
+                                li
+                                    a(href="/khao-sat-ham-so")
+                                        i.icon.icon-circle-o.text-aqua
+                                        span Khảo sát và vẽ đồ thị hàm số
+                                li
+                                    a(href="/ve-do-thi-ham-so-bat-ki")
+                                        i.icon.icon-circle-o.text-aqua
+                                        span Vẽ đồ thị hàm số bất kỳ
+                                li
+                                    a(href="/huong-dan-su-dung-ve-do-thi")
+                                        i.icon.icon-circle-o.text-aqua
+                                        span Hướng dẫn sử dụng chức năng
+            article.col-md-9.p-b-40.b-l.p-40
+                section
+                    .row
+                        .col-md-12
+                            h2 
+                                i.icon.icon-functions
+                                | Hàm số cần khảo sát
+                            hr
+                            .text-center
+                                #MathInput.math-display
+                                    if (functionTex === null)
+                                        | $$y = f(x) =$$
+                                    else
+                                        | $$y = f(x) = #{functionTex}$$
+                            .text-center.p-t-b-20
+                                button.btn.btn-primary#explore(type=button, data-tex=(functionTex == null ? "" : functionTex)) Khảo sát và vẽ đồ thị hàm số trên
+                section.p-t-b-20
+                    .row
+                        .col-md-12
+                            h2
+                                i.icon.icon-wallet
+                                | Bài giải khảo sát
+                            input#result(value=JSON.stringify(result), type="hidden")
+                            input#classification(value=classification, type="hidden")
+                            hr
+                            if (classification === "nosupport")
+                                    .math-display-result
+                                        strong Kogida 
+                                        | chưa hỗ trợ khảo sát đồ thị này. 
+                                    .math-display-result
+                                        | Chúng tôi sẽ vẽ đồ thị nằm trên miền mà bạn mong muốn. Vui lòng nhập miền cần vẽ:
+                                    .math-display-result.pl-5
+                                        ul.list-for-display
+                                            li Miền giá trị của x:
+                                                .math-input(data-name="xmin", data-tex="-10")
+                                                    | \( x_{min} = -10 \)
+                                                .math-input(data-name="xmax", data-tex="10")
+                                                    | \( x_{max} = 10 \)
+                                            li Miền giá trị của y:
+                                                .math-input(data-name="ymin", data-tex="-10")
+                                                    | \( y_{min} = -10 \)
+                                                .math-input(data-name="ymax", data-tex="10")
+                                                    | \( y_{max} = 10 \) 
+                                        .text-center
+                                            button.btn.btn-success#draw(type=button, data-tex=functionTex) Vẽ đồ thị trên miền này
+                            if (classification === "invalid")
+                                .math-display-result
+                                    strong Kogida 
+                                    | không thể vẽ được đồ thị hàm số vì bạn đã nhập sai định dạng hàm số hoặc chúng tôi chưa hỗ trợ vẽ hàm số trên.
+                                .math-display-result
+                                    | Xin lỗi về sự bất tiện này.
+                            if result != null   
+                                if (classification === "linearfunction")
+                                    .math-display-result
+                                        if (result.a.sign === "pos")
+                                            | Hàm số \(\displaystyle #{result.func} \) có hệ số \(\displaystyle a = #{result.a.val + "> 0"} \) đồng biến trên \( \mathbb{R} \)
+                                        else
+                                            | Hàm số \(\displaystyle #{result.func} \) có hệ số \(\displaystyle a = #{result.a.val + "< 0"} \) nghịch biến trên \( \mathbb{R} \)
+                                    .text-center.p-t-20.p-b-10
+                                        img.img-responsive#considering_change(src="dist/layout/home/img/basic/loading.gif", alt="Đồ thị hàm số " + result.func, width="80")
+                                        p.math-display-result.p-t-10 Bảng biến thiên của hàm số \(\displaystyle #{result.func} \)
+                                    .math-display-result
+                                        | Đồ thị của hàm số \(\displaystyle #{result.func} \) là một đường thẳng có tính chất:
+                                        .pl-5
+                                            ul.list-for-display
+                                                li có hệ số góc \(k\) bằng \( \displaystyle a = #{result.a.val} \)
+                                                li không song song với các trục tọa độ
+                                                li cắt trục Ox tại điểm \(\displaystyle A\left(#{result.Ox}, 0\right)\) và cắt trục Oy tại điểm \(\displaystyle B(0, #{result.Oy}) \)
+                                    .math-display-result
+                                        | - Đồ thị: 
+                                        .text-center.p-t-20.p-b-10
+                                            img.img-responsive#diagram(src="dist/layout/home/img/basic/loading.gif", alt="Đồ thị hàm số " + result.func, width="80")
+                                else if (classification === "quadraticfunction")
+                                    .math-display-result
+                                        | Đồ thị hàm số \(\displaystyle #{result.func} \) với \(\Delta = #{result.delta.val} #{result.delta.sign === "pos" ? "> 0" : (result.delta.sign === "neg" ? "< 0" : "= 0")} \) có các tính chất sau đây:
+                                        .pl-5
+                                            ul.list-for-display
+                                                li Đỉnh \(\displaystyle I\left(#{result.I.x}, #{result.I.y}\right)\)
+                                                li Trục đối xứng là đường thẳng \( \displaystyle x = #{result.I.x} \)
+                                                if result.a.sign === "pos"
+                                                    li Bề lõm hướng lên vì \(\displaystyle a = #{result.a.val + "> 0"}  \)
+                                                else
+                                                    li Bề lõm hướng xuống vì \( \displaystyle a = #{result.a.val + "< 0"} \)
+                                    .text-center.p-t-20.p-b-10
+                                        img.img-responsive#considering_change(src="dist/layout/home/img/basic/loading.gif", alt="Đồ thị hàm số " + result.func, width="80")
+                                        p.math-display-result.p-t-10 Bảng biến thiên của hàm số \(\displaystyle #{result.func} \)
+                                    .math-display-result
+                                        | - Đồ thị: 
+                                        .text-center.p-t-20.p-b-10
+                                            img.img-responsive#diagram(src="dist/layout/home/img/basic/loading.gif", alt="Đồ thị hàm số " + result.func, width="80")
+                                else if (classification === "cubicfunction")
+                                    .math-display-result
+                                        | Hàm số: \( #{result.func} \)
+                                    .math-display-result
+                                        | - Tập xác định: \(\mathbb{D} = \mathbb{R}\)
+                                    .math-display-result
+                                        | - Sự biến thiên:
+                                        .pl-4
+                                            ul.list-for-display
+                                                li Chiều biến thiên: \(\displaystyle y' = #{result.deri.expr} \)
+                                                    if result.deri.root.length === 0
+                                                        | \( #{result.deri.sign === "pos" ? "> 0" : "< 0"} ,\forall x \in \mathbb{D} \)
+                                                        br
+                                                        | Hàm số #{result.deri.sign === "pos" ? "đồng " : "nghịch "} biến trên \( \left(-\infty; +\infty\right) \)
+                                                    else if result.deri.root.length === 1
+                                                        | ; \(y' = 0 \Leftrightarrow \displaystyle x = #{result.deri.root[0]} \)
+                                                        br
+                                                        | Hàm số #{result.a.sign === "pos" ? "đồng " : "nghịch "} biến trên \( \displaystyle \left( -\infty; #{result.deri.root[0]} \right) \) và \( \displaystyle \left( #{result.deri.root[0]}; +\infty \right) \)
+                                                    else
+                                                        | ; \(y' = 0 \Leftrightarrow \displaystyle x = #{result.deri.root[0]} \) hoặc \(\displaystyle x = #{result.deri.root[1]}\)
+                                                        .pt-2
+                                                        | Hàm số đồng biến trên khoảng #{result.a.sign === "pos" ? "\\( \\displaystyle \\left( -\\infty;" + result.deri.root[0] + "\\right) \\) và \\( \\displaystyle \\left(" + result.deri.root[1] + "; +\\infty \\right) \\)" : "\\( \\displaystyle \\left(" + result.deri.root[0] + ";" + result.deri.root[1]  + " \\right) \\)"}
+                                                        .pt-2
+                                                        | Hàm số nghịch biến trên khoảng #{result.a.sign === "pos" ? "\\( \\displaystyle \\left(" + result.deri.root[0] + ";" + result.deri.root[1]  + " \\right) \\)" : "\\( \\displaystyle \\left( -\\infty;" + result.deri.root[0] + "\\right) \\) và \\( \\displaystyle \\left(" + result.deri.root[1] + "; +\\infty \\right) \\)"} 
+                                                li Cực trị:
+                                                    if result.deri.root.length < 2
+                                                        | Hàm số không có cực trị
+                                                    else
+                                                        .pt-2
+                                                            | Hàm số đạt cực tiểu tại #{result.a.sign === "pos" ? "\\( x ="+ result.deri.root[1] + ", y_{CT} = " + result.val[1] + " \\)" : "\\( x ="+ result.deri.root[0] + ", y_{CT} = " + result.val[0] + " \\)"}
+                                                        .pt-2
+                                                            | Hàm số đạt cực đại tại #{result.a.sign === "pos" ? "\\( x ="+ result.deri.root[0] + ", y_{CĐ} = " + result.val[0] + " \\)" : "\\( x ="+ result.deri.root[1] + ", y_{CĐ} = " + result.val[1] + " \\)"}
+                                    
+                                                li Giới hạn:
+                                                    | \( \displaystyle \lim_{x \to +\infty} f(x) = #{result.a.sign === "pos" ? "+\\infty" : "-\\infty"} \)
+                                                    | ; \( \displaystyle \lim_{x \to -\infty} f(x) = #{result.a.sign === "pos" ? "-\\infty" : "+\\infty"} \)
+                                                li Bảng biến thiên:
+                                                    .text-center.p-t-20.p-b-10
+                                                        img.img-responsive#considering_change(src="dist/layout/home/img/basic/loading.gif", alt="Bảng biến thiên hàm số: " + result.func, width="80")
+                                    .math-display-result
+                                        | - Đồ thị: 
+                                        .text-center.p-t-20.p-b-10
+                                            img.img-responsive#diagram(src="dist/layout/home/img/basic/loading.gif", alt="Đồ thị hàm số " + result.func, width="80")
+                                else if (classification === "biquadraticfunction")
+                                    .math-display-result
+                                        | Hàm số: \( \displaystyle #{result.func} \)
+                                    .math-display-result
+                                        | - Tập xác định: \(\mathbb{D} = \mathbb{R}\)
+                                    .math-display-result
+                                        | - Sự biến thiên:
+                                        .pl-4
+                                            ul.list-for-display
+                                                li Chiều biến thiên: \(\displaystyle y' = #{result.deri.expr} \)
+                                                    if result.deri.root.length === 1
+                                                        | ; \(y' = 0 \Leftrightarrow \displaystyle x = #{result.deri.root[0]} \)
+                                                        .pt-2
+                                                            | Hàm số #{result.a.sign === "pos" ? "nghịch " : "đồng "} biến trên \( \displaystyle \left( -\infty; 0 \right) \) và #{result.a.sign === "pos" ? "đồng " : "nghịch "} biến \( \displaystyle \left(0; +\infty \right) \)
+                                                    else
+                                                        | ; \(y' = 0 \Leftrightarrow \displaystyle x = #{result.deri.root[1]} \) hoặc \(\displaystyle x = \pm #{result.deri.root[2]}\)
+                                                        .pt-2
+                                                        | Hàm số đồng biến trên khoảng 
+                                                        if (result.a.sign === "pos")
+                                                            | \(\displaystyle \left(#{result.deri.root[0]}; #{result.deri.root[1]}\right) \) và \(\displaystyle \left(#{result.deri.root[2]}; +\infty \right) \)
+                                                        else
+                                                            | \(\displaystyle \left(-\infty; #{result.deri.root[0]}\right) \) và \(\displaystyle \left(#{result.deri.root[1]}; #{result.deri.root[2]}\right) \)
+                                                        .pt-2
+                                                        | Hàm số nghịch biến trên khoảng 
+                                                        if (result.a.sign === "neg")
+                                                            | \(\displaystyle \left(#{result.deri.root[0]}; #{result.deri.root[1]}\right) \) và \(\displaystyle \left(#{result.deri.root[2]}; +\infty \right) \)
+                                                        else
+                                                            | \(\displaystyle \left(-\infty; #{result.deri.root[0]}\right) \) và \(\displaystyle \left(#{result.deri.root[1]}; #{result.deri.root[2]}\right) \)
+                                                li Cực trị:
+                                                    if result.deri.root.length === 1
+                                                        .pt-2
+                                                            if (result.a.sign === "pos")
+                                                                | Hàm số đạt cực tiểu tại \( \displaystyle x = #{result.deri.root[0]}, y_{CT} = #{result.val[0]} \).
+                                                            else
+                                                                | Hàm số đạt cực đại tại \( \displaystyle x = #{result.deri.root[0]}, y_{CĐ} = #{result.val[0]} \).
+                                                        .pt-2
+                                                            if (result.a.sign === "pos")
+                                                                | Hàm số không có cực đại.
+                                                            else
+                                                                | Hàm số không có cực tiểu.
+                                                    else 
+                                                        .pt-2
+                                                            if (result.a.sign === "pos")
+                                                                | Hàm số đạt cực đại tại \( \displaystyle x = #{result.deri.root[1]}, y_{CĐ} = #{result.val[1]}\)
+                                                            else
+                                                                | Hàm số đạt cực đại tại \( \displaystyle x = \pm #{result.deri.root[2]}, y_{CT} = #{result.val[2]} \)
+                                                        .pt-2
+                                                            if (result.a.sign === "neg")
+                                                                | Hàm số đạt cực tiểu tại \( \displaystyle x = #{result.deri.root[1]}, y_{CĐ} = #{result.val[1]}\)
+                                                            else
+                                                                | Hàm số đạt cực tiểu tại \( \displaystyle x = \pm #{result.deri.root[2]}, y_{CT} = #{result.val[2]}\)
+                                                li Giới hạn: \( \displaystyle \lim_{x \to +\infty} y = #{result.a.sign === "pos" ? "+" : "-" } \infty; \lim_{x \to +\infty} y = #{result.a.sign === "pos" ? "-" : "+" } \infty  \)
+                                                li Bảng biến thiên:
+                                                    .text-center.p-t-20.p-b-10
+                                                        img.img-responsive#considering_change(src="dist/layout/home/img/basic/loading.gif", alt="Bảng biến thiên hàm số: " + result.func, width="80")
+                                    .math-display-result
+                                        | - Đồ thị: 
+                                        .text-center.p-t-20.p-b-10
+                                            img.img-responsive#diagram(src="dist/layout/home/img/basic/loading.gif", alt="Đồ thị hàm số " + result.func, width="80")
+                                else if (classification === "linearrationalfunction")
+                                    .math-display-result
+                                        | Hàm số: \(\displaystyle #{result.func} \)
+                                    .math-display-result
+                                        | - Tập xác định: \( \displaystyle \mathbb{D} = \mathbb{R} \backslash \left\{#{result.noexist}\right\} \)
+                                    .math-display-result
+                                        | - Sự biến thiên:
+                                        .pl-4
+                                            ul.list-for-display
+                                                li Chiều biến thiên: \( \displaystyle y = #{result.deri.expr} #{result.deri.sign === "pos" ? "> 0" : "< 0"} , \forall x \in \mathbb{D} \)
+                                                    .pt-2
+                                                        | Hàm số #{result.deri.sign === "pos" ? "đồng " : "nghịch "} biến trên từng khoảng \( \displaystyle \left(-\infty; #{result.noexist} \right) \) và \( \displaystyle \left(#{result.noexist}; +\infty \right) \)
+                                                li Giới hạn và tiệm cận:
+                                                    .pt-2
+                                                        | \( \displaystyle \lim_{x \to -\infty} y = \lim_{x \to +\infty} y = #{result.lim.neginf} \)
+                                                        | \(\Rightarrow \) Tiệm cận ngang: \( \displaystyle x = #{result.lim.neginf} \)
+                                                    .pt-2
+                                                        | \( \displaystyle \lim_{x \to #{result.noexist}^-} y = #{"\\" + result.lim.negnoexist}, \lim_{x \to #{result.noexist}^+} y = #{"\\" + result.lim.posnoexist} \)
+                                                        | \( \Rightarrow \) Tiệm cận đứng: \( \displaystyle y = #{result.noexist} \)
+                                                li Bảng biến thiên:
+                                                    .text-center.p-t-20.p-b-10
+                                                        img.img-responsive#considering_change(src="dist/layout/home/img/basic/loading.gif", alt="Bảng biến thiên hàm số: " + result.func, width="80")
+                                    .math-display-result
+                                        | - Đồ thị: 
+                                        .text-center.p-t-20.p-b-10
+                                            img.img-responsive#diagram(src="dist/layout/home/img/basic/loading.gif", alt="Đồ thị hàm số " + result.func, width="80")
+                                        .pt-2
+                                            | Đồ thị nhận điểm \(\displaystyle I\left(#{result.noexist}; #{result.lim.neginf} \right)\) làm tâm đối xứng.
+                                else if (classification === "quadraticandlinearrationalfunction")
+                                    .math-display-result
+                                        | Hàm số: \(\displaystyle #{result.func.expr} \)
+                                    .math-display-result
+                                        | - Tập xác định: \( \displaystyle \mathbb{D} = \mathbb{R} \backslash \{#{result.noexist}\} \)
+                                    .math-display-result
+                                        | - Sự biến thiên:
+                                        .pl-4
+                                            if (result.deri.root.length === 0)
+                                                | \( #{result.deri.sign === "pos" ? "> 0" : "< 0"}, \forall x \in \mathbb{D} \)
+                                                .pt-2
+                                                    | Hàm số #{result.ad.sign === "pos" ? "đồng " : "nghịch "} biến trên từng khoảng xác định \( \displaystyle \left(-\infty; #{result.noexist} \right) \) và \( \displaystyle \left(#{result.noexist}; +\infty \right) \) 
+                                            else
+                                                ul.list-for-display
+                                                    li Chiều biến thiên: \(\displaystyle y' = #{result.deri.expr} \)
+                                                        .pt-2
+                                                            | \(y' = 0 \Leftrightarrow \displaystyle x = #{result.deri.root[0]}\) hoặc \(\displaystyle x = #{result.deri.root[1]}\)
+                                                        if (result.ad.sign === "pos")
+                                                            .pt-2
+                                                                | Hàm số đồng biến trên các khoảng \( \displaystyle \left(-\infty; #{result.deri.root[0]} \right) \) và \( \displaystyle \left(#{result.deri.root[1]}; +\infty \right) \)
+                                                            .pt-2
+                                                                | Hàm số nghịch biến trên các khoảng \( \displaystyle \left(#{result.deri.root[0]}; #{result.noexist} \right) \) và \( \displaystyle \left(#{result.noexist}; #{result.deri.root[1]} \right) \)
+                                                        else
+                                                            .pt-2
+                                                                | Hàm số đồng biến trên các khoảng \( \displaystyle \left(#{result.deri.root[0]}; #{result.noexist} \right) \) và \( \displaystyle \left(#{result.noexist}; #{result.deri.root[1]} \right) \)
+                                                            .pt-2
+                                                                | Hàm số nghịch biến trên các khoảng \( \displaystyle \left(-\infty; #{result.deri.root[0]} \right) \) và \( \displaystyle \left(#{result.deri.root[1]}; +\infty \right) \)
+                                                    li Cực trị:
+                                                        if result.deri.root.length === 0
+                                                            | Hàm số không có cực trị
+                                                        else
+                                                            if (result.ad.sign === "pos")
+                                                                .pt-2
+                                                                    | Hàm số có cực đại tại \( \displaystyle x = #{result.deri.root[0]}, y_{CĐ} = #{result.val[0]} \)    
+                                                                .pt-2
+                                                                    | Hàm số có cực tiểu tại \( \displaystyle x = #{result.deri.root[1]}, y_{CT} = #{result.val[1]} \)
+                                                            else
+                                                                .pt-2
+                                                                    | Hàm số có cực đại tại \( \displaystyle x = #{result.deri.root[1]}, y_{CT} = #{result.val[1]} \)
+                                                                .pt-2
+                                                                    | Hàm số có cực tiểu tại \( \displaystyle x = #{result.deri.root[0]}, y_{CĐ} = #{result.val[0]} \) 
+                                                    li Giới hạn và tiệm cận:
+                                                        .pt-2
+                                                            | \( \displaystyle \lim_{x \to -\infty} =  #{"\\" + result.lim.neginf}, \lim_{x \to +\infty} =  #{"\\" + result.lim.posinf}\)
+                                                        .pt-2
+                                                            | \( \displaystyle \lim_{x \to #{result.noexist}^-} y = #{"\\" + result.lim.negnoexist}, \lim_{x \to #{result.noexist}^+} y= #{"\\" + result.lim.posnoexist} \Rightarrow \) Tiệm cận đứng: \(\displaystyle x = #{result.noexist}\) 
+                                                        .pt-2
+                                                            | \( \displaystyle \left. \begin{array}{l}
+                                                            | \lim_{x \to -\infty} \left[y - \left( #{result.func.floor} \right)\right] = \lim_{x \to -\infty} #{result.func.rest} = 0 \\
+                                                            | \lim_{x \to +\infty} \left[y - \left( #{result.func.floor} \right)\right] = \lim_{x \to +\infty} #{result.func.rest} = 0
+                                                            | \end{array} \right\} \Rightarrow \)
+                                                            | Tiệm cận xiên: \(\displaystyle y = #{result.func.floor} \)
+                                                    li Bảng biến thiên:
+                                                        .text-center.p-t-20.p-b-10
+                                                            img.img-responsive#considering_change(src="dist/layout/home/img/basic/loading.gif", alt="Bảng biến thiên hàm số: " + result.func, width="80")
+                                    .math-display-result
+                                        | - Đồ thị: 
+                                        .text-center.p-t-20.p-b-10
+                                            img.img-responsive#diagram(src="dist/layout/home/img/basic/loading.gif", alt="Đồ thị hàm số " + result.func, width="80")
+block style
+    link(rel="stylesheet", href="dist/pages/function-explorer/style/index.min.css")
+block script
+    script(src="components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="/dist/pages/function-explorer/script/index.min.js")
+
+

@@ -1,0 +1,169 @@
+extends ../../layout/home/index_white
+include ./mixin
+
+block content
+    .search-section
+        .container
+            h1 Tìm giá trị lớn nhất, giá trị nhỏ nhất
+    .container
+        .row
+            .col-md-3.sticky
+                aside.main-sidebar
+                    div
+                        section.sidebar.p-t-b-40
+                            ul.sidebar-menu.scroll
+                                li
+                                    a(href="/tim-gtln-gtnn-tren-doan")
+                                        i.icon.icon-circle-o.text-aqua
+                                        span Tìm GTLN, GTNN trên đoạn
+                                li
+                                    a(href="/tim-gtln-gtnn-tren-khoang")
+                                        i.icon.icon-circle-o.text-aqua
+                                        span Tìm GTLN, GTNN trên khoảng
+                                li
+                                    a(href="/huong-dan-su-dung-ve-do-thi")
+                                        i.icon.icon-circle-o.text-aqua
+                                        span Hướng dẫn sử dụng chức năng
+            article.col-md-9.p-b-40.b-l.p-40
+                section
+                    .row
+                        .col-md-12
+                            h2 
+                                i.icon.icon-functions
+                                | Hàm số cần tìm
+                            hr
+                            .text-center
+                                #MathInput.math-display
+                                    if (functionTex === null)
+                                        | $$y = f(x) =$$
+                                    else
+                                        | $$y = f(x) = #{functionTex}$$
+                            .math-display-result.pl-5.p-t-10
+                                | Miền giá trị của x:
+                                .math-input(data-name="xmin", data-tex=xmin)
+                                    | \( x_{min} = #{xmin} \)
+                                .math-input(data-name="xmax", data-tex=xmax)
+                                    | \( x_{max} = #{xmax} \)
+                            if (set == "open")
+                                .math-display-result.pl-5.p-t-10
+                                    .row
+                                        .col-md-4
+                                            .form-check
+                                                label
+                                                    input(type="radio", name="half", value="full", checked="true")
+                                                    | Chỉ tìm trên khoảng
+                                        .col-md-4
+                                            .form-check
+                                                label
+                                                    input(type="radio", name="half", value="left")
+                                                    | Nửa khoảng trái
+                                        .col-md-4
+                                            .form-check
+                                                label
+                                                    input(type="radio", name="half", value="right")
+                                                    | Nửa khoảng phải
+                            .text-center
+                                button.btn.btn-primary#draw(type=button, data-tex=(functionTex == null ? "" : functionTex)) Tìm GTLN, GTNN của hàm số
+                section.p-t-b-20
+                    .row
+                        .col-md-12
+                            h2
+                                i.icon.icon-wallet
+                                span.pl-2 Cách tìm
+                            hr
+                            if functionTex != null
+                                if result.message == "valid"
+                                    if result.set == "closed"
+                                        .math-display-result
+                                            | Xét hàm số: \(\displaystyle y = #{functionTex}\) trên đoạn \( \displaystyle \left[#{xmin}; #{xmax}\right] \)
+                                        .math-display-result
+                                            | Tập xác định: \( \mathbb{D} = 
+                                            +displaySet(result.domain)
+                                            | \)
+                                        .math-display-result
+                                            | Đạo hàm: 
+                                            | \( y' = \displaystyle #{result.deri.val}
+                                            if result.deri.constant != null
+                                                if result.deri.constant == "pos"
+                                                    | > 0 , \forall x \in \displaystyle \left(#{xmin}; #{xmax}\right)
+                                                else if result.deri.constant == "neg"
+                                                    | < 0 , \forall x \in \displaystyle \left(#{xmin}; #{xmax}\right)
+                                                else if result.deri.constant == "zero"
+                                                    | = 0 , \forall x \in \displaystyle \left(#{xmin}; #{xmax}\right)
+                                            | \)
+                                        if result.deri.constant == null
+                                            .math-display-result
+                                                | Với \(x \in \displaystyle \left(#{xmin}; #{xmax}\right) \), ta có:
+                                                | \( \displaystyle y' = 0 
+                                                if result.deri.root.length > 1
+                                                    | \Leftrightarrow \left[ \begin{array}{l}
+                                                    each root, index in result.deri.root
+                                                        | x = #{root.val}
+                                                        if root.accept == "yes"
+                                                            | \text{ (nhận)}
+                                                        else
+                                                            | \text{ (loại)}
+                                                        | \\
+                                                    | \end{array} \right.
+                                                    | \)
+                                                else if result.deri.root.length == 1
+                                                    | \Leftrightarrow x = #{result.deri.root[0].val}
+                                                    if result.deri.root[0].accept == "yes"
+                                                        | \text{ (nhận)}
+                                                    else
+                                                        | \text{ (loại)}
+                                                    | \)
+                                                else
+                                                    | \)
+                                                    | : Phương trình vô nghiệm.
+                                        .math-display-result
+                                            | Tính giá trị của các điểm đặc biệt:
+                                        .math-display-result
+                                            .pl-5
+                                                ul.list-for-display
+                                                    each point, index in result.point
+                                                        li \( \displaystyle y \left(#{point[0]} \right) = #{point[1]} \)
+                                        .math-display-result
+                                            | Từ đó, ta suy ra:
+                                        .math-display-result
+                                            .pl-5
+                                                ul.list-for-display
+                                                    li 
+                                                        | Giá trị nhỏ nhất: \( \displaystyle \min_{ x \in \left[#{xmin}; #{xmax}\right]} y = #{result.min.y} \) khi 
+                                                        if result.min.x.length == 1
+                                                            | \( x = #{result.min.x[0]} \)
+                                                        else 
+                                                            | \( x \in \left\{ 
+                                                            each x, index in result.min.x
+                                                                if index == result.min.x.length - 1
+                                                                    | #{x}
+                                                                else
+                                                                    | #{x} ;
+                                                            | \right\} \)
+                                                    li 
+                                                        | Giá trị lớn nhất: \( \displaystyle \max_{ x \in \left[#{xmin}; #{xmax}\right]} y = #{result.max.y} \) khi 
+                                                        if result.max.x.length == 1
+                                                            | \( x = #{result.max.x[0]} \)
+                                                        else 
+                                                            | \( x \in \left\{ 
+                                                            each x, index in result.max.x
+                                                                if index == result.max.x.length - 1
+                                                                    | #{x}
+                                                                else
+                                                                    | #{x} ;
+                                                            | \right\} \)
+                                    else if result.set == "open"
+                                        | #{JSON.stringify(result)}
+                                        .text-center.p-t-20.p-b-10
+                                            img.img-responsive#considering_change(src="dist/layout/home/img/basic/loading.gif", alt="Bảng biến thiên hàm số: " + result.func, width="80")
+
+                                                    
+
+                                
+block style
+    link(rel="stylesheet", href="dist/pages/minmax/style/index.min.css")
+block script
+    script(src="components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="/dist/pages/minmax/script/index.min.js")
+
+

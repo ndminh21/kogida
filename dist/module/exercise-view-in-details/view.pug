@@ -1,0 +1,62 @@
+extends ../../layout/home/index_white
+
+block content
+    .search-section
+        .container
+            h1 Chương #{exercise.Chapter.ChapterOrder}: #{exercise.Chapter.ChapterName} 
+                small Môn: #{exercise.Chapter.gradeSubject.subject.SubjectName} - Khối: #{exercise.Chapter.gradeSubject.grade.GradeName}
+    .content-wrapper
+        .container
+            input#exercise_info(type="hidden", value=JSON.stringify(exercise))
+            .col-xl-10.mx-lg-auto
+                .col-md-12
+                    .shadow.p-t-20.p-b-20.pl-4.pr-4
+                        h4
+                            i.icon.icon-question
+                            span.pl-2 Đề bài
+                        hr
+                        .media-body
+                            h6.exercise-content!= exercise.Content
+                            if parameterValues != null
+                                input#parameterValues(type="hidden", value=JSON.stringify(parameterValues))
+                            if (exercise.NoParameter === false)
+                                each parameter, index in JSON.parse(exercise.Parameter)
+                                    table.parameter-container
+                                        tr
+                                            td.parameter-tex
+                                                | \( #{parameter.tex} = \)
+                                            td.parameter-value(data-index= index)
+                                                .parameter-value-core
+                                                    if parameterValues == null
+                                                        | \[ \]
+                                                    else
+                                                        | \[ #{parameterValues[index]} \]
+                                .mt-3.text-center
+                                    button.btn.btn-primary#solve(type="button") Giải bài này
+                .col-md-12
+                    if (exercise.NoParameter == true || (exercise.NoParameter == false && show == true))
+                        .shadow.p-t-20.p-b-20.pl-4.pr-4.mt-4
+                            h4
+                                i.icon.icon-school
+                                span.pl-2 Bài giải
+                            hr
+                            if exercise.SolutionList.length === 0
+                                | Hiện tại, chúng tôi chưa hỗ trợ giải bài tập này.
+                            else if exercise.SolutionList.length === 1
+                                .solution!= exercise.SolutionList[0].Content
+                            else
+                                ul.nav.nav-tabs(role="tablist")
+                                    each solution, index in exercise.SolutionList
+                                        li.nav-item
+                                            a(class=(index === 0 ? "nav-link active" : "nav-link"), data-toggle="tab", href="#tab_" + index, role="tab", aria-controls="tab_" + index) Cách giải #{index + 1}
+                                .tab-content#tabcontent
+                                    each solution, index in exercise.SolutionList
+                                        div(role="tabpanel", class=(index === 0 ? "tab-pane fade show active" : "tab-pane fade"), id="tab_" + index, aria-labelledby="tab_" + index + "-tab" )!= solution.Content
+    
+block style
+    link(rel="stylesheet", href="/dist/pages/exercise-view-in-details/style/index.min.css")
+
+block script
+    script(src="/components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="/dist/pages/exercise-view-in-details/script/index.min.js")
+

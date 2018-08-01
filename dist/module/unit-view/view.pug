@@ -1,0 +1,40 @@
+extends ../../layout/home/index_white
+
+block content
+    .search-section
+        .container
+            h1 Bài #{unit.UnitOrder}: #{unit.UnitName} 
+                small Môn: #{unit.Chapter.gradeSubject.subject.SubjectName} - Lớp: #{unit.Chapter.gradeSubject.grade.GradeName} - Chương: #{unit.Chapter.ChapterName}
+    .container
+        .row
+            .col-md-3.sticky
+                aside.main-sidebar
+                    div
+                        section.sidebar.p-t-b-40
+                            ul.sidebar-menu.scroll
+                                each unit in chapter.UnitList.sort((a, b) => a.UnitOrder - b.UnitOrder)
+                                    li
+                                        a(href="/trang-bai-hoc?ma=" + unit.UnitId)
+                                            i.icon.icon-circle-o.text-aqua
+                                            span= unit.UnitName
+                                
+            article.col-md-9.p-b-40.b-l.p-40
+                section
+                    .row
+                        .col-md-12
+                            h2 
+                                i.icon.icon-functions
+                                | Nội dung bài học
+                            hr
+                            .math-display-result!=unit.Content
+                section.p-t-b-20
+                    .row
+                        .col-md-12
+                            h2
+                                i.icon.icon-wallet
+                                span.pl-2 Các bài tập trong sách giáo khoa
+                            hr
+                
+block style
+
+block script

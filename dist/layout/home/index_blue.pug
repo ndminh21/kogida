@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+html(lang="vi")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        block meta-data
+        meta(name="description", content="")
+        meta(name="author", content="")
+        title Kogida - Giải bài tập trực tuyến - Be Your Own Tutor
+        link(rel="stylesheet", href="/dist/layout/home/style/index.css")
+        link(rel="stylesheet", href="/dist/layout/home/style/style.min.css")
+        block style
+    body
+        #loader.loader
+            .plane-container
+                img(src="/dist/layout/home/img/basic/loading.svg", alt="Loading...")
+        #app.paper-loading
+            .nav-light.blue.lighten-1
+                nav.mainnav.navbar.navbar-default.justify-content-between
+                        .container.relative
+                            a.offcanvas.dl-trigger.paper-nav-toggle(type='button', data-toggle='offcanvas', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
+                                i
+                            a.navbar-brand(href='/').text-white
+                                img.d-inline-block.align-top(alt="Logo Kogida", src="/dist/layout/home/img/icon/white_logo.svg", width="40", height="40")
+                                span.align-middle.text-black.m-lg-2.s-24.font-weight-lighter kogida
+                            .paper_menu
+                                #dl-menu.xv-menuwrapper.responsive-menu
+                                    ul.dl-menu.align-items-center
+                                        li
+                                            a(href="/") Trang chủ
+                                        li.parent
+                                            a(href="/chuong-trinh-pho-thong") Chương trình học
+                                            ul.lg-submenu
+                                                each grade in gradeList
+                                                    li.parent
+                                                        a(href="#")= grade.GradeName
+                                                        ul.lg-submenu
+                                                            each subject in grade.subjectList
+                                                                li
+                                                                    a(href="/trang-mon-hoc?khoi=" + grade.GradeId + "&mon=" + subject.SubjectId)= subject.SubjectName
+                                        li.parent.megamenu
+                                            a(href="#") Công cụ toán học
+                                            ul.lg-submenu
+                                                li
+                                                    a(href="#")
+                                                        i.icon.icon-magic.s-24.text-red
+                                                        | Công cụ toán học
+                                                    ul.lg-submenu
+                                                        li
+                                                            a(href="/giai-pt-hpt") Giải phương trình, hệ phương trình
+                                                        li
+                                                            a(href="/khao-sat-ham-so") Khảo sát, vẽ đồ thị hàm số
+                                                        li
+                                                            a(href="/may-tinh-truc-tiep-kogida") Máy tính Kogida
+                                                        li
+                                                            a(href="/ho-tro-soan-thao-latex") Hỗ trợ soạn thảo Latex
+                                                li
+                                                    div
+                                                        .text-center
+                                                            p
+                                                                strong Tạo kỳ tích học tập cùng Kogida nhé :)
+                                                            figure
+                                                                img.img-responsive(src="/dist/layout/home/img/basic/congratulation.png")
+
+                                        li.parent
+                                            a(href="/thi-thu-kogida") Thi thử với Kogida
+                                            ul.lg-submenu
+                                                li
+                                                    a(href="/de-thi-thpt-quoc-gia") Đề thi THPT Quốc gia
+                                        li.parent
+                                            a(href="/ve-chung-toi") Về chúng tôi
+                                        li.pare
+            main
+                block content
+            footer.blue.lighten-1.text-white
+                .container
+                    .row
+                        .col-md-2.responsive-phone
+                            a.brand(href='#')
+                                img(src="/dist/layout/home/img/icon/white_logo.svg" width="60")
+                                span.align-middle.text-black.m-lg-2.s-24.font-weight-bolder kogida
+                                span.circle
+                        .col-md-3
+                            h6 Công cụ toán học
+                            ul.footer-links
+                                li
+                                    a(href='/giai-pt-hpt') Giải phương trình, hệ phương trình
+                                li
+                                    a(href='/khao-sat-ham-so') Khảo sát và vẽ đồ thị hàm số
+                                li
+                                    a(href='/may-tinh-truc-tiep-kogida') Máy tính Kogida
+                                li
+                                    a(href='/soan-thao-latex') Hỗ trợ soạn thảo Latex
+                        .col-md-2
+                            h6 Thi thử Kogida
+                            ul.footer-links
+                                li
+                                    a(href='/giai-pt-hpt') Đề thi THPT Quốc gia
+                                li
+                                    a(href='/khao-sat-ham-so') Đề thi học kỳ
+                                li
+                                    a(href='/may-tinh-truc-tiep-kogida') Đề thi học sinh giỏi
+                                li
+                                    a(href='/soan-thao-latex') Hỗ trợ soạn thảo đề thi
+                        .col-md-2
+                            h6 Về chúng tôi
+                            ul.footer-links
+                                li
+                                    a(href='/gioi-thieu') Giới thiệu
+                                li
+                                    a(href='/lien-he') Liên hệ
+                                li
+                                    a(href='/dang-nhap') Đăng nhập
+                        .col-md-3
+                            h6 Kết nối với chúng tôi
+                            ul.social
+                                li.facebook
+                                    a(href='#')
+                                        i.icon.icon-facebook
+                                li.gplus
+                                    a(href='#')
+                                        i.icon.icon-google-plus
+                            .copyrights
+                                p ©2017 BKAN Team
+
+        script(src="/dist/layout/home/script/index.js")
+        block script

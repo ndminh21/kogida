@@ -1,0 +1,218 @@
+mixin generateAllStep(stepList)
+    //| #{JSON.stringify(stepList)}
+    - var firstCondition = stepList.findIndex(step => step.hasOwnProperty("condition"))
+    each step, index in stepList
+        if step.hasOwnProperty("condition")
+            if index == firstCondition
+                .math-display-result
+                    | Điều kiện:\( \displaystyle 
+                    +generateCondition(step.condition)
+                    | \)
+                    | \( \Leftrightarrow \displaystyle 
+                    +generateCondition(stepList[index + 1].condition)
+                    | \)
+        else 
+            .math-display-result
+                +generateResult(step)
+
+mixin displaySet(set)
+    if (set.hasOwnProperty("open_set"))
+        | \displaystyle \left(#{set["open_set"]["min"]}; #{set["open_set"]["max"]}\right)
+    else if (set.hasOwnProperty("closed_set"))
+        | \displaystyle \left[#{set["closed_set"]["min"]}; #{set["closed_set"]["max"]}\right]           
+    else if (set.hasOwnProperty("left_open_set"))
+        | \displaystyle \left(#{set["left_open_set"]["min"]}; #{set["left_open_set"]["max"]}\right]
+    else if (set.hasOwnProperty("right_open_set"))
+        | \displaystyle \left[#{set["right_open_set"]["min"]}; #{set["right_open_set"]["max"]}\right)
+    else if (set.hasOwnProperty("unions"))
+        | \displaystyle \left(
+        each setElem, index in set.unions
+            if index == set.unions.length - 1
+                +displaySet(setElem)
+            else
+                +displaySet(setElem)
+                | \cup
+        | \right)
+    else if (set.hasOwnProperty("intersections"))
+        | \displaystyle \left(
+        each setElem, index in set.intersections
+            if index == set.intersections.length - 1
+                +displaySet(setElem)
+            else
+                +displaySet(setElem)
+                | \cap
+        | \right)
+
+mixin generateResultRaw(result)            
+    if result.hasOwnProperty("start")
+        | \displaystyle #{result.start.val} 
+    else if result.hasOwnProperty("eq")
+        | \displaystyle #{result.eq.val}
+        if result.eq.accept != null
+            | #{result.eq.accept == "yes" ? "\\text{  (nhận)}" : "\\text{   (loại)}"}
+    else if result.hasOwnProperty("neq")
+        | \displaystyle #{result.neq.val}
+    else if result.hasOwnProperty("ineq")
+        | \displaystyle #{result.ineq.val}
+    else if result.hasOwnProperty("and")
+        | \displaystyle \begin{cases}
+        each value, index in result.and
+            +generateResultRaw(value)
+            | \\
+        | \end{cases}
+    else if result.hasOwnProperty("or")
+        | \displaystyle \left[ \begin{array}{l}
+        each value, index in result.or
+            +generateResultRaw(value)
+            | \\
+        | \end{array} \right.
+    else if result.hasOwnProperty("longor")
+        |  \displaystyle \displaystyle 
+        each value, index in result.longor
+            if index == result.longor.length - 1
+                +generateResultRaw(value)
+            else 
+                +generateResultRaw(value)
+                | \lor
+
+
+mixin generateResult(result)
+    if result.hasOwnProperty("start")
+        if (result["start"].hasOwnProperty("and"))
+            | \( \displaystyle
+            +generateResultRaw(result["start"])
+            | \)
+        else
+            | \( \displaystyle #{result.start.val} \)
+    else if result.hasOwnProperty("alias")
+        | Đặt \( #{result.alias.val} \). Bài toán đã cho tương đương với:
+    else if result.hasOwnProperty("start_alias")
+        if result.start_alias.hasOwnProperty("val")
+            | \( \displaystyle #{result.start_alias.val} \)
+        else
+            | \(
+            +generateResultRaw(result.start_alias)
+            | \)
+    else if result.hasOwnProperty("case")
+        | Với \( \displaystyle #{result.case.val} \), ta có:
+    else if result.hasOwnProperty("start_case")
+        if result.start_case.hasOwnProperty("val")
+            | \( \displaystyle #{result.start_case.val} \)
+        else
+            | \(
+            +generateResultRaw(result.start_case)
+            | \)
+    else if result.hasOwnProperty("end_case")
+        if result.end_case.hasOwnProperty("case")
+            if result.end_case.case.accept == "yes"
+                | \( #{result.end_case.case.val} \) thỏa mãn hệ phương trình
+            else
+                | \( #{result.end_case.case.val} \) không thỏa mãn hệ phương trình
+    else if result.hasOwnProperty("start_eq")
+        | Xét phương trình: \(f(x) = #{result.start_eq.val} \)
+    else if result.hasOwnProperty("var_viet")
+        | Theo định lý Vi-et ngược, \( #{result.var_viet[0]} \) và \( #{result.var_viet[1]} \) là nghiệm của phương trình:
+    else if result.hasOwnProperty("start_viet")
+        | \(
+        +generateResultRaw(result.start_viet)
+        | \)
+    else if result.hasOwnProperty("end_viet")
+        | Từ đó, ta có:
+        | \(
+        +generateResultRaw(result.end_viet)
+        | \)
+    else if result.hasOwnProperty("consequence")
+        if result.consequence.hasOwnProperty("val")
+            | \( \displaystyle \Rightarrow #{result.consequence.val} \)
+        else
+            | \( \Rightarrow
+            +generateResultRaw(result.consequence)
+            | \)
+    else if result.hasOwnProperty("verify")
+        | Thử nghiệm với hệ phương trình ban đầu, ta nhận nghiệm:
+        br
+        | \[
+        each root, index in result.verify
+            if index == result.verify.length - 1
+                if (root.accept == "yes")
+                    | #{root.val}
+            else
+                if (root.accept == "yes")
+                    | #{root.val}
+                    | ,
+        | \]
+    else if result.hasOwnProperty("eq")
+        | \( \Leftrightarrow \displaystyle #{result.eq.val} \)
+        if result.eq.accept != null
+            | (#{result.eq.accept == "yes" ? "nhận" : "loại"})
+    else if result.hasOwnProperty("neq")
+        | \( \Leftrightarrow #{result.neq.val} \)
+    else if result.hasOwnProperty("ineq")
+        | \( \Leftrightarrow #{result.ineq.val} \)
+    else if result.hasOwnProperty("and")
+        | \( \Leftrightarrow
+        | \begin{cases}
+        each value, index in result.and
+            +generateResultRaw(value)
+            | \\
+        | \end{cases}
+        | \)
+    else if result.hasOwnProperty("or")
+        | \( \Leftrightarrow
+        | \left[ \begin{array}{l}
+        each value, index in result.or
+            +generateResultRaw(value)
+            | \\
+        | \end{array} \right.
+        | \)
+    else if result.hasOwnProperty("longor")
+        | \( \Leftrightarrow \displaystyle 
+        each value, index in result.longor
+            if index == result.longor.length - 1
+                +generateResultRaw(value)
+            else 
+                +generateResultRaw(value)
+                | \lor 
+        | \)
+    
+mixin generatePolyEq(result)
+    each step, index in result.step
+        .math-display-result
+            if index === 0
+                | \(
+                +generateResult(step)
+                | \)
+            else
+                | \( \Leftrightarrow 
+                +generateResult(step)
+                | \)
+
+mixin generateCondition(conditionList)
+    if conditionList.length <= 1
+        +generateResultRaw(conditionList[0])
+    else
+        | \begin{cases}
+        each condition in conditionList
+            +generateResultRaw(condition)
+            | \\
+        | \end{cases}
+
+mixin generatePolyIneq(result)
+    - var functionIndex = result.step.findIndex((step) => step.hasOwnProperty("eq"))
+    each step, index in result.step
+        .math-display-result
+            if index === 0
+                | \(
+                +generateResult(step)
+                | \)
+            else if index === functionIndex
+                | Xét phương trình: \(
+                | f(x) =
+                +generateResult(step)
+                | \)
+            else
+                | \( \Leftrightarrow 
+                +generateResult(step)
+                | \)
+    
+    

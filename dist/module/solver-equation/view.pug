@@ -1,0 +1,127 @@
+extends ../../layout/home/index_white
+include ./mixin
+
+block content
+    .search-section
+        .container
+            h1 Giải phương trình, bất phương trình, hệ phương trình
+    .container
+        .row
+            .col-md-3.sticky
+                aside.main-sidebar
+                    div
+                        section.sidebar.p-t-b-40
+                            ul.sidebar-menu.scroll
+                                li.active
+                                    a(href="/giai-pt-hpt")
+                                        i.icon.icon-circle-o.text-aqua
+                                        span Giải phương trình
+                                li
+                                    a(href="/giai-pt-hpt")
+                                        i.icon.icon-circle-o.text-aqua
+                                        span Giải bất phương trình
+                                li
+                                    a(href="/giai-pt-hpt")
+                                        i.icon.icon-circle-o.text-aqua
+                                        span Giải hệ phương trình
+                                li
+                                    a(href="/huong-dan-su-dung-giai-pt-hpt")
+                                        i.icon.icon-circle-o.text-aqua
+                                        span Hướng dẫn sử dụng  
+            article.col-md-9.p-b-40.b-l.p-40
+                section
+                    .row
+                        .col-md-12
+                            h2 
+                                i.icon.icon-functions
+                                | Bài toán cần giải
+                            hr
+                            .text-center
+                                #MathInput.math-display
+                                    if (tex == null)
+                                        | $$ \text{Nhập bài toán vào ô này} $$
+                                    else
+                                        | $$ #{tex} $$
+                            .text-center.p-t-b-20
+                                button.btn.btn-primary#solver(type=button, data-tex=(tex == null ? "" : tex), data-anglemode=(angleMode == null ? "" : angleMode), data-variables=(variables == null ? "" : JSON.stringify(variables))) Giải (bất/ hệ) phương trình trên
+                section.p-t-b-20
+                    .row
+                        .col-md-12
+                            h2
+                                i.icon.icon-wallet
+                                | Cách giải
+                            input#result(value=JSON.stringify(result), type="hidden")
+                            input#classification(value=classification, type="hidden")
+                            hr
+                            if result != null
+                                if result.classification != "nonlineareqsys" && result.category != "invalid"
+                                    +generateAllStep(result.step)
+                                if result.classification === "polyineq"
+                                    .math-display-result Bảng xét dấu:
+                                        .text-center.p-t-20.p-b-10
+                                            img.img-responsive#considering_sign(src="dist/layout/home/img/basic/loading.gif", alt="Bảng xét dấu", width="80")
+                                if result.category === "eq"
+                                    if result.root.length > 0
+                                        .math-display-result
+                                            | Vậy nghiệm của phương trình là 
+                                            if result.root.length < 2
+                                                | \( #{result.root[0]} \)
+                                            else
+                                                each root, index in result.root
+                                                    if index == result.root.length - 1
+                                                        |  và \( \displaystyle #{root} \)
+                                                    else if index === result.root.length - 2
+                                                        | \( \displaystyle #{root} \)
+                                                    else
+                                                        | \( \displaystyle #{root} \),
+                                            
+                                    else
+                                        .math-display-result
+                                            | Phương trình đã cho vô nghiệm.
+                                else if result.category === "ineq"
+                                    .math-display-result
+                                        | Tập nghiệm của bất phương trình đã cho là
+                                    .math-display-result
+                                        | \[ S =
+                                        +displaySet(result.root)
+                                        | \]
+                                else if result.category === "eqsys"
+                                    if result.classification != "nonlineareqsys"
+                                        .math-display-result
+                                            | Vậy nghiệm của hệ phương trình đã cho là 
+                                            each root, index1 in result.root
+                                                if index1 == result.root.length - 1
+                                                    | \( \left( \displaystyle 
+                                                    each rootElement, index2 in root
+                                                        if index2 === root.length - 1
+                                                            | #{rootElement}
+                                                        else
+                                                            | #{rootElement}
+                                                            | ;
+                                                    | \right) \)
+                                                else
+                                                    | \( \left( \displaystyle 
+                                                    each rootElement, index2 in root
+                                                        if index2 === root.length - 1
+                                                            | #{rootElement}
+                                                        else
+                                                            | #{rootElement}
+                                                            | ;
+                                                    | \right) ,\) 
+                                    else 
+                                        .math-display-result
+                                            | Chúng tôi chưa hỗ trợ giải từng bước hệ phương trình này!
+                                else if result.category === "invalid"
+                                    .math-display-result
+                                        strong Kogida 
+                                        | không thể giải được bài toán này vì định dạng nhập của bạn không đúng.
+                                    .math-display-result
+                                        | Xin lỗi về sự bất tiện này.
+block style
+    link(rel="stylesheet", href="dist/pages/solver-equation/style/index.min.css")
+
+block script
+    script(src="components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="/dist/pages/solver-equation/script/index.min.js")
+
+

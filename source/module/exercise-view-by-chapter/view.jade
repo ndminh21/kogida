@@ -1,0 +1,111 @@
+extends ../../layout/home/index_white
+
+block content
+    .search-section
+        .container
+            h1 Chương #{chapter.ChapterOrder}: #{chapter.ChapterName} 
+                small Môn: #{chapter.gradeSubject.subject.SubjectName} - Khối: #{chapter.gradeSubject.grade.GradeName}
+    .content-wrapper
+        .container
+            .col-xl-8.mx-lg-auto
+                .masthead.text-center.p-t-0.p-b-0.pl-4
+                    form.seach(action="/tim-kiem-de-bai-theo-chuong", method="get")
+                        input.search-field(type="text", placeholder="Gõ đề bài vào đây", name="content")
+                        input(type="hidden", value=JSON.stringify(chapter), name="chapter")
+                        button(type="submit")
+                            i.icon.icon-search
+                
+                if (!sort)
+                    - ExerciseList = ExerciseList.sort((a, b) => b.CreatedAt - a.CreatedAt)
+                
+                .comments
+                    ol.comment-list
+                        li.comment
+                            each exercise, index in ExerciseList.slice((page - 1) * 10, (page - 1) * 10 + 10)
+                                if index % 2 === 0
+                                    a.float-left(href='#')
+                                        img.avatar(src='/dist/layout/home/img/number3/' + (index + 1) + ".svg", alt='')
+                                    .media-body.description.text-justify
+                                        p!= exercise.Content
+                                    ul.comments-meta
+                                        li
+                                            a(href='#')
+                                                time(datetime=exercise.CreatedAt)= moment(exercise.CreatedAt).fromNow()
+                                        li.reply
+                                            a.comment-reply-link(href='/xem-chi-tiet-bai-tap/' + exercise.ExerciseId) Xem bài tập
+                                else
+                                    ol.comment-list-child
+                                        li.comment
+                                            a.float-left(href='#')
+                                                img.avatar(src='/dist/layout/home/img/number3/' + ((index + 1) === 10 ? "0" : index + 1) + ".svg", alt='')
+                                            .media-body.description.text-justify
+                                                p!= exercise.Content
+                                            ul.comments-meta
+                                                li
+                                                    a(href='#')
+                                                        time(datetime=exercise.CreatedAt)= moment(exercise.CreatedAt).fromNow()
+                                                li.reply
+                                                    a.comment-reply-link(href='/xem-chi-tiet-bai-tap/' + exercise.ExerciseId) Xem bài tập
+                
+                nav
+                    - var lastIndex = Math.ceil(ExerciseList.length / 10)
+                    ul.pagination.justify-content-center
+                        if (page == 1)
+                            li.page-item.disabled
+                                a.page-link(href="#") Trước
+                            li.page-item.disabled
+                                a.page-link(href="#") 1
+                            each value in [1, 2, 3, 4]
+                                - var currIdx = Number(page) + value;
+                                if (currIdx <= lastIndex)
+                                    li.page-item
+                                        a.page-link(href="/xem-bai-tap-theo-chuong/" + chapter.ChapterId + "/" + KhongDau(chapter.ChapterName.toLowerCase(), ["chuyen", "url"]) + "/trang-" + currIdx)= currIdx
+                            if (page >= lastIndex)
+                                li.page-item.disabled
+                                    a.page-link(href="#") Sau
+                            else
+                                li.page-item
+                                    a.page-link(href="/xem-bai-tap-theo-chuong/" + chapter.ChapterId + "/" + KhongDau(chapter.ChapterName.toLowerCase(), ["chuyen", "url"]) + "/trang-2") Sau
+                        else if (Number(page) == lastIndex)
+                            if (page == 1)
+                                li.page-item.disabled
+                                    a.page-link(href="#") Trước
+                            else
+                                li.page-item
+                                    a.page-link(href="/xem-bai-tap-theo-chuong/" + chapter.ChapterId + "/" + KhongDau(chapter.ChapterName.toLowerCase(), ["chuyen", "url"]) + "/trang-" + (Number(page) - 1)) Trước
+                            each value in [3, 2, 1]
+                                - var currIdx = Number(page) - value;
+                                if (currIdx >= 1)
+                                    li.page-item
+                                        a.page-link(href="/xem-bai-tap-theo-chuong/" + chapter.ChapterId + "/" + KhongDau(chapter.ChapterName.toLowerCase(), ["chuyen", "url"]) + "/trang-" + currIdx)= currIdx
+                            li.page-item.disabled
+                                a.page-link(href="/xem-bai-tap-theo-chuong/" + chapter.ChapterId + "/" + KhongDau(chapter.ChapterName.toLowerCase(), ["chuyen", "url"]) + "/trang-" + page)= page    
+                            li.page-item.disabled
+                                a.page-link(href="#") Sau
+                        else
+                            li.page-item
+                                a.page-link(href="/xem-bai-tap-theo-chuong/" + chapter.ChapterId + "/" + KhongDau(chapter.ChapterName.toLowerCase(), ["chuyen", "url"]) + "/trang-" + (page - 1)) Trước
+                            each value in [2, 1, 0]
+                                - var currIdx = Number(page) - value
+                                if (value >= 1)
+                                    li.page-item
+                                        a.page-link(href="/xem-bai-tap-theo-chuong/" + chapter.ChapterId + "/" + KhongDau(chapter.ChapterName.toLowerCase(), ["chuyen", "url"]) + "/trang-" + currIdx)= currIdx
+                            each value in [1, 2]
+                                - var currIdx = Number(page) + value
+                                if (currIdx <= lastIndex)
+                                    li.page-item
+                                        a.page-link(href="/xem-bai-tap-theo-chuong/" + chapter.ChapterId + "/" + KhongDau(chapter.ChapterName.toLowerCase(), ["chuyen", "url"]) + "/trang-" + currIdx)= currIdx
+                            if (page == lastIndex)
+                                li.page-item.disabled
+                                    a.page-link(href="#") Sau
+                            else
+                                li.page-item.disabled
+                                    a.page-link(href="/xem-bai-tap-theo-chuong/" + chapter.ChapterId + "/" + KhongDau(chapter.ChapterName.toLowerCase(), ["chuyen", "url"]) + "/trang-" + (page + 1)) Sau                       
+                                
+block style
+
+block script
+    script(src="/components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="/components/khong-dau/lib/khongdau.js")
+    script(src="/dist/pages/exercise-view-by-chapter/script/index.min.js")
+

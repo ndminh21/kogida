@@ -1,0 +1,92 @@
+extends ../../layout/dashboard/index
+
+block content-header
+    h1 Thông tin về bài giải
+    ol.breadcrumb
+        li
+            a(href="#")
+                i.fa.fa-dashboard
+                | Quản lý bài tập
+        li.active Thông tin về bài giải
+
+block content
+    .row
+        .col-md-12
+            .box.box-info
+                .box-header.with-border
+                    h3.box-title Thông tin về đề bài
+                .box-body
+                    .row
+                        .col-md-12
+                            h4 Đề bài
+                            .exercise-content!= exercise.Content
+                        .col-md-6
+                            h4 Thông tin về môn học
+                            ul
+                                li Môn học: 
+                                    strong #{exercise.Chapter.gradeSubject.subject.SubjectName}
+                                li Khối/ lớp: 
+                                    strong #{exercise.Chapter.gradeSubject.grade.GradeName}
+                                li Chương: 
+                                    strong #{exercise.Chapter.ChapterName}
+                        .col-md-6
+                            h4 Thông tin về tham số và hằng số
+                            ul
+                                - var parameterList = JSON.parse(exercise.Parameter)
+                                li Số tham số: #{parameterList.length}
+                                    if parameterList.length > 0
+                                        ul 
+                                            each parameter, index in parameterList
+                                                li Tham số thứ #{index + 1}: 
+                                                    strong \( #{parameter.tex} \)
+                                - var constantList = JSON.parse(exercise.Constant)
+                                li Số hằng số: #{constantList.length}
+                                    if constantList.length > 0
+                                        ul 
+                                            each constant, index in constantList
+                                                li Hằng số thứ #{index + 1}: 
+                                                    strong \( #{constant.tex} \)
+                        
+        .col-md-12
+            .box.box-primary
+                .box-header.with-border
+                    h3.box-title Các bài giải đã thêm
+                .box-body
+                    table.table.table-responsive
+                        thead
+                            th.text-center Mã BG
+                            th.text-center Nội dung
+                            th.text-center Ngày tạo
+                            th.text-center Người tạo
+                            th.text-center Số CT
+                            th.text-center Thao tác
+                        tbody
+                            each solution, index in exercise.SolutionList
+                                tr
+                                    td.text-center= solution.SolutionId
+                                    td!= solution.Content
+                                    td.text-center= moment(solution.CreatedAt).format("DD/MM/YYYY")
+                                    td.text-center= solution.CreatedUser.FamilyName + " " + solution.CreatedUser.GivenName
+                                    td.text-center= JSON.parse(solution.Formula).length
+                                    td.text-center
+                                        a.btn.btn-sm.btn-info(href="/sua-bai-giai?mabaigiai=" + solution.SolutionId) Sửa bài giải
+                                        br
+                                        a.btn.btn-sm.btn-warning(style="margin-top: 5px", href="/ngung-phat-hanh-bai-giai?mabaigiai=" + solution.SolutionId) #{!solution.IsPublished ? "Phát hành" : "Ngưng phát hành"}
+                        
+block style
+    link(rel="stylesheet", href="/components/select2/dist/css/select2.min.css")
+    link(rel="stylesheet", href="/components/datatables.net-bs/css/dataTables.bootstrap.min.css")
+    link(rel="stylesheet", href="/components/datatables.net/extensions/buttons/css/buttons.bootstrap.min.css")
+    link(rel="stylesheet", href="/dist/pages/unit/style/index.min.css")
+
+block script
+    script(src="/components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="/components/datatables.net/js/jquery.dataTables.min.js")
+    script(src="/components/datatables.net-bs/js/dataTables.bootstrap.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/dataTables.buttons.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/buttons.bootstrap.min.js")
+    script(src="/components/ckeditor/ckeditor.js")
+    script(src="/components/bootbox/bootbox.min.js")
+    script(src="/components/select2/dist/js/select2.full.min.js")
+    script(src="/components/select2/dist/js/i18n/vi.js")
+    script(src="/dist/pages/admin-exercise/script/index.min.js")

@@ -1,0 +1,121 @@
+extends ../../layout/dashboard/index
+
+block content-header
+    h1 Cấp phát tài khoản
+    ol.breadcrumb
+        li
+            a(href="/trang-chinh")
+                i.fa.fa-dashboard
+                | Trang chính
+        li.active Quản lý người dùng
+
+block content
+    .row
+        .col-md-12
+            .box.box-danger
+                .box-header.with-border
+                    h3.box-title Thông tin tài khoản cần cấp phát
+                form(role="form", action="/cap-phat-tai-khoan-moi", method="post")
+                    .box-body
+                        .row
+                            .col-md-4
+                                .form-group
+                                    label(for="input-familyname") Họ và tên lót
+                                    input.form-control#input-familyname(type="text", name="user[FamilyName]", required)
+                            .col-md-3
+                                .form-group
+                                    label(for="input-familyname") Tên người dùng
+                                    input.form-control#input-familyname(type="text", name="user[GivenName]", required)
+                            .col-md-2
+                                .form-group
+                                    .row
+                                        .col-md-12
+                                            label
+                                                | Giới tính
+                                    .row(style="padding-top: 8px")
+                                        .col-md-6
+                                            label
+                                                input.gender(type="radio", name="user[Gender]", checked, value=1)
+                                                span(style="padding-left: 3px") Nam
+                                        .col-md-6    
+                                            label
+                                                input.gender(type="radio", name="user[Gender]", value=0)
+                                                span(style="padding-left: 3px") Nữ
+                            .col-md-3
+                                .form-group
+                                    label(for="input-birthday") Ngày sinh
+                                    input#input-birthday.form-control(type="text", name="user[Birthday]", required)
+                        //.row
+                            .col-md-8
+                                .row
+                                    .col-md-12
+                                        label Địa chỉ liên hệ
+                                .row
+                                    .col-md-12
+                                        .row
+                                            .col-md-4
+                                                input.form-control(type="text", name="user[DetailsPlace]", placeholder="Số nhà/ đường")
+                                            .col-md-8
+                                                select.form-control(name="user[PlaceId]", style="width: 100%;")
+                                                    each subdivision in subdivisions
+                                                        option(value=subdivision.ComId)= subdivision.ComName + " - " + subdivision.DistName + " - " + subdivision.ProvName
+                        .row
+                            .col-md-4
+                                .form-group
+                                    label(for="input-userid") Tên đăng nhập
+                                    input#input-userid.form-control(type="text", name="user[UserId]", required)
+                            .col-md-4
+                                .form-group
+                                    label(for="input-password") Mật khẩu
+                                    input#input-password.form-control(type="password", name="account[Password]", required)
+                            .col-md-4
+                                .form-group
+                                    label(for="input-role") Chức danh
+                                    select.form-control(name="user[RId]", style="width: 100; height: 100%;")
+                                        each role in roleList
+                                            option(value=role.RId)= role.RName
+                    .box-footer.text-center
+                        button.btn.btn-primary(type="submit") Cấp phát
+    .row
+        .col-md-12
+            .box.box-primary
+                .box-header.with-border
+                    h3.box-title Danh sách các tài khoản được cấp phát
+                .box-body
+                    .row
+                        .col-md-12
+                            table.table.table-hover.table-striped
+                                thead
+                                    tr
+                                        th Tên tài khoản
+                                        th Họ và tên lót
+                                        th Tên
+                                        th Thời điểm cấp
+                                        th Chức danh
+                                        th Thao tác
+                                tbody
+                                    each user in allocatedUsers
+                                        tr
+                                            td= user.UserId
+                                            td= user.FamilyName
+                                            td= user.GivenName
+                                            td= user.Account.CreatedAt
+                                            td= user.Role.RName
+                                            td
+                                                a.btn.btn-sm.btn-danger(href="/xoa-tai-khoan-cap-phat?userid=" + user.UserId) Xóa tài khoản
+                        
+
+
+block style
+    link(rel="stylesheet", href="/components/select2/dist/css/select2.min.css")
+    link(rel="stylesheet", href="/components/datatables.net-bs/css/dataTables.bootstrap.min.css")
+    link(rel="stylesheet", href="/components/iCheck/all.css")
+
+block script
+    script(src="/components/datatables.net/js/jquery.dataTables.min.js")
+    script(src="/components/datatables.net-bs/js/dataTables.bootstrap.min.js")
+    script(src="/components/select2/dist/js/select2.full.min.js")
+    script(src="/components/select2/dist/js/i18n/vi.js")
+    script(src="/components/iCheck/icheck.min.js")
+    script(src="/components/mask/jquery.mask.min.js")
+    script(src="/dist/pages/account-allocation/script/index.min.js")

@@ -1,0 +1,104 @@
+extends ../../layout/dashboard/index
+
+block content-header
+    h1 Thông tin đơn vị hành chính Việt Nam
+    ol.breadcrumb
+        li
+            a(href="/trang-chinh")
+                i.fa.fa-dashboard
+                | Trang chính
+        li.active ĐVHC Việt Nam
+block content
+    .row
+        .col-md-6
+            .box.box-danger
+                .box-header.with-border
+                    h3.box-title Cập nhật thông tin thủ công
+                form(role="form", action="/cap-nhat-dvhc-thu-cong", method="post")
+                    .box-body
+                        .row
+                            .col-md-12
+                                if (message.length > 0)
+                                    .alert.alert-danger
+                                        h4
+                                            i.icon.fa.fa-ban
+                                            | Cảnh báo lỗi!
+                                        p= message
+                        .row
+                            .col-md-4
+                                .form-group
+                                    label(for="input-comId") Mã xã
+                                    input#input-comId.form-control(type="text", name="subdivision[ComId]")
+                            .col-md-8
+                                .form-group
+                                    label(for="input-comName") Tên xã/ phường/ thị trấn
+                                    input#input-comName.form-control(type="text", name="subdivision[ComName]")
+                        .row
+                            .col-md-4
+                                .form-group
+                                    label(for="input-distId") Mã huyện
+                                    input#input-distId.form-control(type="text", name="subdivision[DistId]")
+                            .col-md-8
+                                .form-group
+                                    label(for="input-distName") Tên quận/ huyện/ thị xã/ thành phố (thuộc tỉnh)
+                                    input#input-distName.form-control(type="text", name="subdivision[DistName]")
+                        .row
+                            .col-md-4
+                                .form-group
+                                    label(for="input-provId") Mã tỉnh
+                                    input#input-provId.form-control(type="text", name="subdivision[ProvId]")
+                            .col-md-8
+                                .form-group
+                                    label(for="input-provName") Tên tỉnh/ thành phố trực thuộc TW
+                                    input#input-provName.form-control(type="text", name="subdivision[ProvName]")
+                    .box-footer
+                        .row.text-center
+                            .col-md-6
+                                button.btn.btn-primary(type="submit") Cập nhật thông tin
+                            .col-md-6
+                                button.btn.btn-warning(type="reset") Xóa tất cả
+        .col-md-6
+            .box
+                .box-header.with-border
+                    h3.box-title Tải file thông tin cập nhật
+                form(role="form", action="/cap-nhat-dvhc-bang-file", method="post", enctype="multipart/form-data" )
+                    .box-body
+                        .row
+                            .col-md-12
+                                input.filestyle(name="file" ,type="file", data-icon="true", data-buttonText="Chọn file", data-buttonName="btn-primary", data-placeholder="Chỉ chọn file excel")
+                    .box-footer
+                        .row.text-center
+                            .col-md-12
+                                button.btn.btn-primary(type="submit") Tải file lên
+
+    .row
+        .col-md-12
+            .box.box-primary
+                .box-header.with-border
+                    h3.box-title Danh sách các đơn vị hành chính đang sử dụng
+                .box-body
+                    table.table.table-bordered.table-hover
+                        thead
+                            th Mã tỉnh
+                            th Tên tỉnh
+                            th Mã huyện
+                            th Tên huyện
+                            th Mã xã
+                            th Tên xã
+                        tbody
+                            each subdivision in subdivisions
+                                tr
+                                    td= subdivision.ProvId
+                                    td= subdivision.ProvName
+                                    td= subdivision.DistId
+                                    td= subdivision.DistName
+                                    td= subdivision.ComId
+                                    td= subdivision.ComName
+block style
+    link(rel="stylesheet", href="/components/datatables.net-bs/css/dataTables.bootstrap.min.css")
+
+block script
+    script(src="/components/datatables.net/js/jquery.dataTables.min.js")
+    script(src="/components/datatables.net-bs/js/dataTables.bootstrap.min.js")
+    script(src="/components/bootstrap-filestyle/bootstrap-filestyle.min.js")
+    script(src="/dist/pages/subdivision/script/index.min.js")

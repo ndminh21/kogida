@@ -1,0 +1,42 @@
+extends ../../layout/white/index
+block meta
+    title Kogida - Đăng nhập
+    
+block content
+    #primary.p-t-b-100.height-full
+        .container
+            .row
+                .col-lg-4.mx-md-auto.paper-card
+                    .text-center
+                        img(src='/dist/layout/home/img/icon/logo.svg', alt='Logo Kogida', width="60")
+                        h2.p-t-20 KOGIDA
+                        p.p-t-m-20
+                            span Chào mừng bạn đã đến với 
+                            br
+                            span Hệ thống giải bài tập trực tuyến 
+                            span.font-weight-bold KOGIDA
+                    form(action='/dang-nhap', method="post")
+                        .form-group.has-icon
+                            i.icon-verified_user
+                            input.form-control.form-control-lg(type='text', placeholder='Tên đăng nhập', name="username", autofocus)
+                        .form-group.has-icon
+                            i.icon-user-secret
+                            input.form-control.form-control-lg(type='password', placeholder='Mật khẩu', name="password")
+                        input.btn.btn-primary.btn-lg.btn-block(type='submit', value='Đăng nhập')
+                        .forget-pass-block.p-t-b-20
+                            a.forget-pass(href="#") Quên tài khoản hoặc mật khẩu
+                        a.btn.btn-lg.btn-block.btn-social.facebook(href='#')
+                            i.icon-facebook
+                            |  Đăng nhập với facebook
+                        a.btn.btn-lg.btn-block.btn-social.gplus(href='#')
+                            i.icon-google
+                            |  Đăng nhập với google
+
+
+block style
+    link(rel="stylesheet", href="dist/pages/authentication/style/login.min.css")
+
+block script
+    script(src="/dist/pages/authentication/script/index.min.js")
+
+

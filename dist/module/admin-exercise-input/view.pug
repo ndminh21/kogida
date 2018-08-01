@@ -1,0 +1,157 @@
+extends ../../layout/dashboard/index
+
+block content-header
+    if exercise == null
+        h1 Thêm bài tập mới
+    else
+        h1 Sửa bài tập
+        input#exerciseId(type="hidden", value=exercise.ExerciseId)
+    ol.breadcrumb
+        li
+            a(href="#")
+                i.fa.fa-dashboard
+                | Hệ thống bài tập
+        if exercise == null
+            li.active Thêm bài tập mới
+        else
+            li.active Sửa bài tập
+block content
+    .row
+        .col-md-12
+            .box.box-primary
+                .box-header.with-border
+                    if exercise == null
+                        h3.box-title Thêm bài tập mới vào hệ thống
+                    else
+                        h3.box-title Sửa bài tập đã tồn tại trong hệ thống
+                .box-body
+                    #exercise-input-wizard
+                        h3 Cấu hình về chương/ môn/ khối
+                        section
+                            .row
+                                .col-md-12
+                                    .form-group
+                                        if exercise == null
+                                            label(for="input-gradeSubjectId") Chọn khối/ lớp - môn học
+                                            select#input-gradeSubjectId.select2.form-control(style="width: 100%;", name="gradeSubjectId")
+                                                option(value="-1", selected) Chọn khối/ lớp - môn học
+                                                each gradeSubject in gradeSubjectList
+                                                    option(value=gradeSubject.Id)= gradeSubject.grade.GradeName + " - " + gradeSubject.subject.SubjectName 
+                                        else
+                                            label(for="input-gradeSubjectId") Chọn khối/ lớp - môn học
+                                            select#input-gradeSubjectId.select2.form-control(style="width: 100%;", name="gradeSubjectId")
+                                                option(value="-1", selected) Chọn khối/ lớp - môn học
+                                                each gradeSubject in gradeSubjectList
+                                                    option(value=gradeSubject.Id, selected=(exercise.Chapter.gradeSubject.Id == gradeSubject.Id))= gradeSubject.grade.GradeName + " - " + gradeSubject.subject.SubjectName 
+                            .row
+                                .col-md-12
+                                    .form-group
+                                        if exercise == null
+                                            label(for="input-chapterId") Chọn chương học
+                                            select#input-chapterId.select2.form-control(style="width: 100%;")
+                                                option(value="-1", selected) Chọn chương học tương ứng của bài tập
+                                        else
+                                            label(for="input-chapterId") Chọn chương học
+                                            select#input-chapterId.select2.form-control(style="width: 100%;")
+                                                option(value="-1", selected) Chọn chương học tương ứng của bài tập
+                                                each chapter, index in chapterList
+                                                    option(value=chapter.ChapterId, selected=(exercise.Chapter.ChapterId == chapter.ChapterId))= chapter.ChapterName
+
+                            .row
+                                .col-md-12
+                                    .form-group
+                                        if (exercise == null)
+                                            label(for="input-level") Chọn trình độ
+                                            select#input-level.select2.form-control(style="width: 100%")
+                                                option(value="1", selected) Nhận biết
+                                                option(value="2") Đọc - hiểu
+                                                option(value="3") Vận dụng thấp
+                                                option(value="4") Vận dụng cao
+                                        else
+                                            label(for="input-level") Chọn trình độ
+                                            select#input-level.select2.form-control(style="width: 100%")
+                                                option(value="1", selected=(exercise.Level == 1)) Nhận biết
+                                                option(value="2", selected=(exercise.Level == 2)) Đọc - hiểu
+                                                option(value="3", selected=(exercise.Level == 3)) Vận dụng thấp
+                                                option(value="4", selected=(exercise.Level == 4)) Vận dụng cao
+                        h3 Nhập các tham số và hằng số đầu vào
+                        section
+                            .row
+                                .col-md-9
+                                    h4 Các công thức cần sử dụng
+                                .col-md-3
+                                    button.btn.btn-primary.pull-right.add-new-formula(button="button") Thêm tham số và hằng số đầu vào
+                            .formula-contaniner
+                                if exercise == null
+                                    .row.input-formula-row
+                                        .col-md-9.input-formula-box
+                                            .input-formula
+                                                .input-formula-tex
+                                                    | \(\)
+                                                .input-formula-bare-tex.hidden
+                                                .input-formula-anglemode.hidden
+                                        .col-md-3.input-param-box
+                                            label
+                                                input.input-param(type="checkbox")
+                                                span(style="padding-left: 3px") Tham số đầu vào
+                                else
+                                    - var parameterList = JSON.parse(exercise.Parameter)
+                                    each parameter, index in parameterList
+                                        .row.input-formula-row
+                                            .col-md-9.input-formula-box
+                                                .input-formula
+                                                    .input-formula-tex
+                                                        | \( #{parameter.tex} \)
+                                                    .input-formula-bare-tex.hidden
+                                                        | #{parameter.tex}
+                                                    .input-formula-anglemode.hidden
+                                                        | #{parameter.anglemode}
+                                            .col-md-3.input-param-box
+                                                label
+                                                    input.input-param(type="checkbox", checked=true)
+                                                    span(style="padding-left: 3px") Tham số đầu vào
+                                    - var constantList = JSON.parse(exercise.Constant)
+                                    each constant, index in constantList
+                                        .row.input-formula-row
+                                            .col-md-9.input-formula-box
+                                                .input-formula
+                                                    .input-formula-tex
+                                                        | \( #{constant.tex} \)
+                                                    .input-formula-bare-tex.hidden
+                                                        | #{constant.tex}
+                                                    .input-formula-anglemode.hidden
+                                                        | #{constant.anglemode}
+                                            .col-md-3.input-param-box
+                                                label
+                                                    input.input-param(type="checkbox", checked=false)
+                                                    span(style="padding-left: 3px") Tham số đầu vào
+
+                        h3 Nhập đề bài
+                        section
+                            .row
+                                .col-md-4
+                                    h4 Nhập đề bài
+                                .col-md-3.text-center
+                                    button.btn.btn-primary.pull-right.add-param(button="button") Thêm tham số đầu vào
+                                .col-md-5.text-center
+                                    button.btn.btn-info.open-editor.pull-right(type="button", data-editor="exercise") Mở soạn thảo công thức
+                            .row
+                                .col-md-12
+                                    if exercise == null
+                                        textarea#exercise-input(name='exercise-input', rows='10', cols='200')
+                                    else
+                                        textarea#exercise-input(name='exercise-input', rows='10', cols='200')!= exercise.Content
+block style
+    link(rel="stylesheet", href="/components/select2/dist/css/select2.min.css")
+    link(rel="stylesheet", href="/dist/pages/admin-exercise-input/style/index.min.css")
+    link(rel="stylesheet", href="/components/iCheck/all.css")
+
+block script
+    script(src="components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="/components/ckeditor/ckeditor.js")
+    script(src="components/steps/jquery.steps.js")
+    script(src="components/bootbox/bootbox.min.js")
+    script(src="/components/select2/dist/js/select2.full.min.js")
+    script(src="/components/select2/dist/js/i18n/vi.js")
+    script(src="/components/iCheck/icheck.min.js")
+    script(src="/dist/pages/admin-exercise-input/script/index.min.js")

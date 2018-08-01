@@ -1,0 +1,60 @@
+extends ../../layout/home/index_white
+
+block content
+    .search-section.gradient.text-white
+        .container
+            h1 
+                i.icon-notebook6
+                span.pl-2 Thi thử với Kogida  
+    .content-wrapper
+        .container 
+            .row
+                .col-md-12
+                    if (message == "notfound")
+                        h4.text-center
+                            strong Kogida 
+                            | không tìm thấy đề thi nào có mã bí mật như bạn đã nhập
+                    else
+                        .box
+                            .box-body
+                                form(action="/tim-kiem-ky-thi-bi-mat", method="post")
+                                    .form-group
+                                        .row
+                                            .col-md-4
+                                            .col-md-4
+                                                input.form-control(type="password", name="secret", placeholder="Nhập mã bí mật của kỳ thi")
+                                .text-center
+                                    h4 ------------- hoặc chọn -------------
+                                table.table.table-bordered
+                                    tbody
+                                        tr
+                                            th.text-center #
+                                            th.text-center Tên đề thi
+                                            th.text-center Số lượng câu hỏi
+                                            th.text-center Thời gian làm bài
+                                            th.text-center Hạn chót làm bài
+                                            th.text-center Môn học
+                                        each exam, index in examList.filter(exam => exam.IsPublished).filter(exam => exam.Secret == null).filter(exam => exam.QuestionList != null)
+                                            - var Structure = JSON.parse(exam.Structure)
+                                            tr
+                                                td.text-center= index + 1
+                                                td
+                                                    a(href="/lam-bai-thi/buoc-1?mabaithi=" + exam.ExamId)= exam.ExamName
+                                                td.text-center= Structure.QuestionNumber
+                                                td.text-center= exam.Time + " phút"
+                                                td.text-center= (exam.Deadline == null ? "" : moment(exam.Deadline).format("DD/MM/YYYY HH:mm"))
+                                                td.text-center
+                                                    if exam.GradeSubject == null
+                                                        | Bài thi tự do
+                                                    else
+                                                        | #{exam.GradeSubject.grade.GradeName} - #{exam.GradeSubject.subject.SubjectName}
+
+                                    
+        
+block style
+    link(rel="stylesheet", href="dist/pages/function-explorer/style/index.min.css")
+block script
+    script(src="components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="/dist/pages/function-explorer/script/index.min.js")
+
+

@@ -1,0 +1,35 @@
+extends ../../layout/home/hero
+
+block content
+    section.hero-header.teal.darken-3.animatedParent
+        .table
+            .header-text
+                .container
+                    .row.m-t-150
+                        .col-lg-6.mx-md-auto.animated.bounceInLeft
+                            .responsive
+                                .p-t-b-100
+                                    h1.text-white
+                                        span.white-text.s-48.font-weight-lighter CHÚNG TÔI LÀ 
+                                        br
+                                        span.s-64.font-weight-bolder.glow TRỢ LÝ HỌC TẬP
+                                    p.s-18.p-t-b-20.font-weight-lighter.white-text
+                                        | Bất kỳ bài tập khó nào, hãy hỏi chúng tôi ...
+                                    form
+                                        .row
+                                            .col-lg-8
+                                                .form-group.has-icon
+                                                    i.icon-search
+                                                    input.form-control.form-control-lg.no-b(type='text', autofocus='')
+                                            .col-lg-4
+                                                input.btn.btn-line.btn-lg(type='submit', value='Tìm kiếm')
+                                    .p-t-b-20
+                                        a.btn-fab.btn-primary.yellow.btn-fab-md(href='/dang-nhap')
+                                            i.icon-arrow_forward
+                                        small.text-white.pl-lg-2
+                                            | Bạn đã có tài khoản chưa? 
+                                            a(href='/dang-nhap')
+                                                | Hãy đăng nhập
+                        .col-lg-5.animated.fadeInLeftShort.m-t-50
+                            img.img-fluid(src='/dist/layout/home/img/basic/professor.png', alt='/')
+            .overlay(data-start='#03A9F4', data-end='#A345C1', data-orientation='toleft', data-opacity='.6')

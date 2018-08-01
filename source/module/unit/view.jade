@@ -1,0 +1,96 @@
+extends ../../layout/dashboard/index
+
+block content-header
+    h1 Thông tin về bài học
+    ol.breadcrumb
+        li
+            a(href="#")
+                i.fa.fa-dashboard
+                | Quản lý môn học, khối lớp
+        li.active Thông tin về bài học
+
+block content
+    .row
+        .col-md-12
+            .box.box-info
+                .box-header.with-border
+                    h3.box-title #{repair === true ? "Sửa thông tin về bài học" : "Tạo bài học mới"}
+                form(action=(repair === true ? "/sua-bai-hoc" : "/tao-bai-hoc-moi"), method="post")
+                    .box-body
+                        .row
+                            if (repair != true)
+                                .col-md-6
+                                    .form-group
+                                        label(for="input-gradeSubjectId") Chọn khối/ lớp - môn học
+                                        select#input-gradeSubjectId.select2.form-control(style="width: 100%;")
+                                            option(value="-1", selected) Chọn khối/ lớp - môn học
+                                            each gradeSubject in gradeSubjectList
+                                                option(value=gradeSubject.Id)= gradeSubject.grade.GradeName + " - " + gradeSubject.subject.SubjectName 
+                            if (repair != true)
+                                .col-md-6
+                                    .form-group
+                                        label(for="input-chapterid") Chọn chương
+                                        select#input-chapterid.select2.form-control(style="width: 100%;", name="chapterId")
+                                        
+                            .col-md-9
+                                .form-group
+                                    label(for="input-unitname") Tên bài #{repair === true ? "cần sửa" : "mới"}
+                                    input#input-chaptername.form-control(style="width: 100%;", name="unitname", type="text", required=true, value=(repair === true ? unitInfo.UnitName : ""))
+                            .col-md-3
+                                .form-group
+                                    label(for="input-unitorder") Thứ tự hiển thị
+                                    input#input-chapterorder.form-control(style="width: 100%;", name="unitorder", type="number",required=true, value=(repair === true ? unitInfo.UnitOrder : ""))
+                            .col-md-12
+                                .form-group
+                                    label(for="input-content") Nội dung
+                                    if (repair === true)
+                                        textarea#input-content(name='content', rows='10', cols='200')!= unitInfo.Content
+                                        input(type="hidden", value=unitInfo.UnitId, name="unitid")
+                                    else
+                                        textarea#input-content(name='content', rows='10', cols='200')
+
+                    .box-footer.text-center
+                        button.btn.btn-primary(button="submit") #{repair === true ? "Sửa bài học" : "Thêm mới"}
+        .col-md-12
+            .box.box-primary
+                .box-header.with-border
+                    h3.box-title Danh sách các bài học trong hệ thống
+                .box-body
+                    table.table.table-bordered.table-hover
+                        thead
+                            th.text-center Tên khối/ lớp
+                            th.text-center Tên môn học
+                            th.text-center Tên chương
+                            th.text-center Tên bài học
+                            th.text-center Thứ tự hiển thị
+                            th.text-center Thao tác
+                        tbody
+                            each unit, index in unitList
+                                tr
+                                    td.text-center= unit.Chapter.gradeSubject.grade.GradeName
+                                    td.text-center= unit.Chapter.gradeSubject.subject.SubjectName
+                                    td.text-center= unit.Chapter.ChapterName
+                                    td.text-center= unit.UnitName
+                                    td.text-center= unit.UnitOrder
+                                    td.text-center
+                                        button.edit.btn.btn-warning.btn-sm(type="button", data-unitid= unit.UnitId) Sửa bài
+                                        button.remove.btn.btn-danger.btn-sm(type="button", data-unitid= unit.UnitId) Xóa bài
+                        
+                            
+                    
+block style
+    link(rel="stylesheet", href="/components/select2/dist/css/select2.min.css")
+    link(rel="stylesheet", href="/components/datatables.net-bs/css/dataTables.bootstrap.min.css")
+    link(rel="stylesheet", href="/components/datatables.net/extensions/buttons/css/buttons.bootstrap.min.css")
+    link(rel="stylesheet", href="/dist/pages/unit/style/index.min.css")
+
+block script
+    script(src="/components/datatables.net/js/jquery.dataTables.min.js")
+    script(src="/components/datatables.net-bs/js/dataTables.bootstrap.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/dataTables.buttons.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/buttons.bootstrap.min.js")
+    script(src="/components/ckeditor/ckeditor.js")
+    script(src="components/bootbox/bootbox.min.js")
+    script(src="/components/select2/dist/js/select2.full.min.js")
+    script(src="/components/select2/dist/js/i18n/vi.js")
+    script(src="/dist/pages/unit/script/index.min.js")

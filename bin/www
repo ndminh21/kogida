@@ -1,0 +1,13 @@
+const Application = new require("../dist/Application.js").default;
+
+var http = require("http");
+
+var app = new Application().app;
+
+var server = http.Server(app);
+
+var port = process.env.PORT || 8012;
+
+server.listen(port, function() {
+  return console.log(`This website is online at: http://localhost:${port}`);
+});

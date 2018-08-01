@@ -1,0 +1,87 @@
+extends ../../layout/dashboard/index
+
+block content-header
+    h1 Thông tin về chương
+    ol.breadcrumb
+        li
+            a(href="#")
+                i.fa.fa-dashboard
+                | Quản lý môn học, khối lớp
+        li.active Thông tin về chương
+
+block content
+    .row
+        .col-md-12
+            .box.box-info
+                .box-header.with-border
+                    h3.box-title #{repair === true ? "Sửa thông tin chương" : "Tạo chương mới cho môn học"}
+                form(action=(repair === true ? "/sua-chuong" : "/tao-chuong-moi"), method="post")
+                    .box-body
+                        .row
+                            .col-md-12
+                                .form-group
+                                    label(for="input-gradeid") Chọn khối/ lớp - môn học
+                                    select#input-gradeid.select2.form-control(style="width: 100%;", name="gradeSubjectId")
+                                        if (repair === true)
+                                            each gradeSubject in gradeSubjectList
+                                                option(value=gradeSubject.Id, selected=(chapterInfo.gradeSubject.Id === gradeSubject.Id))= gradeSubject.grade.GradeName + " - " + gradeSubject.subject.SubjectName
+                                        else
+                                            option(value="-1", selected) Chọn khối/ lớp - môn học
+                                            each gradeSubject in gradeSubjectList
+                                                option(value=gradeSubject.Id)= gradeSubject.grade.GradeName + " - " + gradeSubject.subject.SubjectName 
+                            .col-md-9
+                                .form-group
+                                    label(for="input-chaptername") #{repair === true ? "Tên chương cần sửa" : "Tên chương mới"}
+                                    input#input-chaptername.form-control(style="width: 100%;", name="chaptername", type="text", required=true, value=(repair === true ? chapterInfo.ChapterName : ""))
+                            .col-md-3
+                                .form-group
+                                    label(for="input-chapterorder") Thứ tự hiển thị
+                                    input#input-chapterorder.form-control(style="width: 100%;", name="chapterorder", type="number",required=true, value=(repair === true ? chapterInfo.ChapterOrder : ""))
+                            .col-md-12
+                                if repair === true
+                                    textarea#input-content(name='content', rows='10', cols='200')!= chapterInfo.Content
+                                    input(type="hidden", name="chapterid", value=chapterInfo.ChapterId)
+                                else
+                                    textarea#input-content(name='content', rows='10', cols='200')
+                    .box-footer.text-center
+                        button.btn.btn-primary(button="submit") #{repair === true ? "Sửa thông tin chương": "Thêm mới"}
+        .col-md-12
+            .box.box-primary
+                .box-header.with-border
+                    h3.box-title Danh sách các chương trong hệ thống
+                .box-body
+                    table.table.table-bordered.table-hover
+                        thead
+                            th.text-center Tên khối/ lớp
+                            th.text-center Tên môn học
+                            th.text-center Tên chương
+                            th.text-center Thứ tự hiển thị
+                            th.text-center Thao tác
+                        tbody
+                            each chapter in chapterList
+                                tr
+                                    td.text-center= chapter.gradeSubject.grade.GradeName
+                                    td.text-center= chapter.gradeSubject.subject.SubjectName
+                                    td.text-center= chapter.ChapterName
+                                    td.text-center= chapter.ChapterOrder
+                                    th.text-center
+                                        button.btn.btn-primary.edit.btn-sm(type="button", data-chapterid= chapter.ChapterId) Sửa chương
+                                        button.btn.btn-danger.remove.btn-sm(type="button", data-chapterid= chapter.ChapterId) Xóa
+                            
+                    
+block style
+    link(rel="stylesheet", href="/components/select2/dist/css/select2.min.css")
+    link(rel="stylesheet", href="/components/datatables.net-bs/css/dataTables.bootstrap.min.css")
+    link(rel="stylesheet", href="/components/datatables.net/extensions/buttons/css/buttons.bootstrap.min.css")
+    link(rel="stylesheet", href="/dist/pages/chapter/style/index.min.css")
+
+block script
+    script(src="/components/datatables.net/js/jquery.dataTables.min.js")
+    script(src="/components/datatables.net-bs/js/dataTables.bootstrap.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/dataTables.buttons.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/buttons.bootstrap.min.js")
+    script(src="/components/ckeditor/ckeditor.js")
+    script(src="components/bootbox/bootbox.min.js")
+    script(src="/components/select2/dist/js/select2.full.min.js")
+    script(src="/components/select2/dist/js/i18n/vi.js")
+    script(src="/dist/pages/chapter/script/index.min.js")

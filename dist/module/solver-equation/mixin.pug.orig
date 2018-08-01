@@ -1,0 +1,34 @@
+mixin generateResult(result)
+    if result.hasOwnProperty("eq")
+        | #{result.eq.val}
+    else if result.hasOwnProperty("ineq")
+        | #{result.ineq.val}
+    else if result.hasOwnProperty("and")
+<<<<<<< HEAD
+        | \( \begin{cases}
+        each value, index in result.and
+            +generateResult(value)
+            | \\
+        | \end{cases} \)
+    else if result.hasOwnProperty("or")
+        | \( \left[ \begin{array}{l}
+        each value, index in result.and
+            +generateResult(value)
+            | \\
+        | \end{cases} \right. \)
+
+
+=======
+        | \begin{cases}
+        each value, index in result.and
+            +generateResult(value)
+            | \\
+        | \end{cases}
+    else if result.hasOwnProperty("or")
+        | \left[ \begin{array}{l}
+        each value, index in result.or
+            +generateResult(value)
+            | \\
+        | \end{array} \right.
+>>>>>>> 1097b5b34014c2c0ff20712ef57aa1e074a24fe0
+    

@@ -1,0 +1,73 @@
+extends ../../layout/dashboard/index
+
+block content-header
+    h1 Phân môn học cho các khối/ lớp
+    ol.breadcrumb
+        li
+            a(href="#")
+                i.fa.fa-dashboard
+                | Quản lý môn học, khối lớp
+        li.active Phân môn học cho các khối
+
+block content
+    .row
+        .col-md-12
+            .box.box-info
+                .box-header.with-border
+                    h3.box-title Phân công thủ công
+                form(action="/phan-mon-thu-cong", method="post")
+                    .box-body
+                        .row
+                            .col-md-6
+                                .form-group
+                                    label(for="input-gradeid") Chọn khối/ lớp
+                                    select#input-gradeid.select2.form-control(style="width: 100%;", name="gradeid")
+                                        option(value="-1", selected) Chọn khối/ lớp
+                                        each grade in gradeList
+                                            option(value=grade.GradeId)= grade.GradeName 
+                            .col-md-6
+                                .form-group
+                                    label(for="input-subjectid") Chọn môn học
+                                    select#input-subjectid.select2.form-control(style="width: 100%;", name="subjectid")
+                                        option(value="-1", selected) Chọn môn học cần phân công
+                                        each subject in subjectList
+                                            option(value=subject.SubjectId)= subject.SubjectName
+                    .box-footer.text-center
+                        button.btn.btn-primary(button="submit") Phân công
+        .col-md-12
+            .box.box-primary
+                .box-header.with-border
+                    h3.box-title Danh sách các môn học và khối lớp tương ứng có trong hệ thống
+                .box-body
+                    table.table.table-bordered.table-hover
+                        thead
+                            th.text-center Mã khối/ lớp
+                            th.text-center Tên khối/ lớp
+                            th.text-center Mã môn học
+                            th.text-center Tên môn học
+                            th.text-center Thao tác
+                        tbody
+                            each gradeSubject in gradeSubjectList
+                                tr
+                                    td.text-center= gradeSubject.grade.GradeId
+                                    td.text-center= gradeSubject.grade.GradeName
+                                    td.text-center= gradeSubject.subject.SubjectId
+                                    td.text-center= gradeSubject.subject.SubjectName
+                                    td.text-center
+                                        a.btn.btn-danger.btn-sm(href="/xoa-phan-cong?makhoi=" + gradeSubject.grade.GradeId + "&mamon=" + gradeSubject.subject.SubjectId) Xóa phân công
+                    
+block style
+    link(rel="stylesheet", href="/components/select2/dist/css/select2.min.css")
+    link(rel="stylesheet", href="/components/datatables.net-bs/css/dataTables.bootstrap.min.css")
+    link(rel="stylesheet", href="/components/datatables.net/extensions/buttons/css/buttons.bootstrap.min.css")
+    link(rel="stylesheet", href="/dist/pages/subject-grade/style/index.min.css")
+
+block script
+    script(src="/components/datatables.net/js/jquery.dataTables.min.js")
+    script(src="/components/datatables.net-bs/js/dataTables.bootstrap.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/dataTables.buttons.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/buttons.bootstrap.min.js")
+    script(src="components/bootbox/bootbox.min.js")
+    script(src="/components/select2/dist/js/select2.full.min.js")
+    script(src="/components/select2/dist/js/i18n/vi.js")
+    script(src="/dist/pages/grade-subject/script/index.min.js")

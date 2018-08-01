@@ -1,0 +1,118 @@
+extends ../../layout/dashboard/index
+
+block content-header
+    h1 Quản lý các chức danh của hệ thống
+    ol.breadcrumb
+        li
+            a(href="/trang-chinh")
+                i.fa.fa-dashboard
+                | Trang chính
+        li.active Quản lý chức danh
+
+block content
+    .row
+        .col-md-4
+            .box.box-danger
+                .box-header.with-border
+                    h3.box-title Cập nhật chức danh
+                form(role="form", action="/cap-nhat-chuc-danh", method="post")
+                    .box-body
+                        .row
+                            .col-md-12
+                                .form-group
+                                    label(for="input-roleid") Các chức danh hiện có
+                                    select#input-roleid.select2.form-control(name="role[RId]", style="width: 100%;")
+                                        option(value="-1", selected) Chọn vào đây để thêm mới
+                                        each role in roleWithFunctions 
+                                            option(value=role.RId)= role.RName
+                        .row
+                            .col-md-12
+                                .form-group
+                                    label(for="input-rolename") Tên chức danh (mới)
+                                    input#input-rolename.form-control(name="role[RName]", style="width: 100%;")
+                        .row
+                            .col-md-12
+                                .form-group
+                                    label(for="input-functionIds") Các chức năng có thể thực hiện (thêm)
+                                    select#input-functionIds.form-control(name="role[functionIds][]", style="width: 100%;", multiple=true)
+                                        each gf in gfWithFunctions
+                                            optgroup(label=gf.GFName)
+                                                each func, index in gf.FunctionList
+                                                    option(value=func.FId)= func.FName
+                    .box-footer
+                        .row.text-center
+                            .col-md-12
+                                button.btn.btn-primary(type="submit") Cập nhật
+
+        .col-md-8
+            .box.box-primary
+                .box-header.with-border
+                    h3.box-title Thông tin về chức danh
+                .box-body
+                    if (message_gf.length > 0)
+                            .row
+                                .col-md-12
+                                    .alert.alert-danger
+                                        h4
+                                            i.icon.fa.fa-ban
+                                            | Cảnh báo lỗi!
+                                        p= message_gf
+                    .row
+                        .col-md-12
+                            table.table.table-hover.table-striped
+                                thead
+                                    tr
+                                        th Mã chức danh
+                                        th Tên chức danh
+                                        th Chức năng thực hiện
+                                tbody
+                                    each role in roleWithFunctions
+                                        if role.FunctionList.length == 0
+                                            tr
+                                                    td
+                                                        span= role.RId
+                                                        span
+                                                            | (
+                                                            a(href="/xoa-chuc-danh?role=" + role.RId) Xóa
+                                                            | )
+                                                    td= role.RName
+                                                    td
+                                
+                                        else 
+                                            each func, index in role.FunctionList
+                                                if (index == 0)
+                                                    tr
+                                                        td
+                                                            span= role.RId
+                                                            span
+                                                                | (
+                                                                a(href="/xoa-chuc-danh?role=" + role.RId) Xóa
+                                                                | )
+                                                        td= role.RName
+                                                        td
+                                                            span= func.FName
+                                                            span
+                                                                | (
+                                                                a(href="/xoa-chuc-nang-cua-chuc-danh?role=" + role.RId + "&func=" + func.FId) Xóa
+                                                                | )
+                                                else
+                                                    tr
+                                                        td
+                                                        td
+                                                        td
+                                                            span= func.FName
+                                                            span
+                                                                | (
+                                                                a(href="/xoa-chuc-nang-cua-chuc-danh?role=" + role.RId + "&func=" + func.FId) Xóa
+                                                                | )
+
+block style
+    link(rel="stylesheet", href="/components/select2/dist/css/select2.min.css")
+    link(rel="stylesheet", href="/components/datatables.net-bs/css/dataTables.bootstrap.min.css")
+
+block script
+    script(src="/components/datatables.net/js/jquery.dataTables.min.js")
+    script(src="/components/datatables.net-bs/js/dataTables.bootstrap.min.js")
+    script(src="/components/select2/dist/js/select2.full.min.js")
+    script(src="/components/select2/dist/js/i18n/vi.js")
+    script(src="/dist/pages/role/script/index.min.js")

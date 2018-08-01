@@ -1,0 +1,479 @@
+extends ../../layout/home/index_white
+
+block content
+    .search-section
+        .container
+            h1 Máy tính khoa học Kogida
+
+    .content-wrapper
+        .container
+            .col-xl-10.mx-lg-auto
+                ul.nav.nav-tabs.mb-3(role="tabList")
+                        li.nav-item
+                            a.nav-link.text-center(href="#", style="padding-bottom: 5px !important; padding-top: 6px !important")
+                                img(src="/dist/layout/home/img/icon/logo.svg" width="25")
+                                span.align-middle.text-black.m-lg-2.s-24.font-weight-normal kogida
+                        li.nav-item
+                            a.nav-link.active.text-black.text-center(data-toggle="tab", href="#regular", role="tab", aria-controls="regular", aria-expanded="true", style="padding-bottom: 9px !important; padding-top: 9px !important")
+                                table
+                                    tbody
+                                        tr
+                                            td.menu-symbol-container
+                                                span.menu-symbol.symbol-74 \[\frac{\Box}{\Box}\]
+                                            td.menu-symbol-container
+                                                span.menu-symbol.symbol-82 \[\left(\Box\right)\]
+                        li.nav-item
+                            a.nav-link.text-black.text-center(data-toggle="tab", href="#sum_int", role="tab", aria-controls="regular", aria-expanded="true", style="padding-bottom: 12px !important; padding-top: 13px !important")
+                                table
+                                    tbody
+                                        tr
+                                            td.menu-symbol-container
+                                                span.menu-symbol.symbol-53 \[\sum\]
+                                            td.menu-symbol-container
+                                                span.menu-symbol.symbol-53 \[\int\]
+                                            td.menu-symbol-container
+                                                span.menu-symbol.symbol-53 \[\prod\]
+                        li.nav-item
+                            a.nav-link.text-black.text-center(data-toggle="tab", href="#equation", role="tab", aria-controls="equation", aria-expanded="true", style="padding-bottom: 13px !important; padding-top: 13px !important")
+                                table
+                                    tbody
+                                        tr
+                                            td.menu-symbol-container(align='center')
+                                                span.menu-symbol.symbol-48
+                                                    | \[
+                                                    | \left\{
+                                                    | \begin{array}{c c}
+                                                    | \Box & \Box \\
+                                                    | \Box & \Box
+                                                    | \end{array}
+                                                    | \right.
+                                                    | \]
+                        li.nav-item
+                            a.nav-link.text-black.text-center(data-toggle="tab", href="#greek_letter", role="tab", aria-controls="regular", aria-expanded="true", style="padding-bottom: 12px !important; padding-top: 13px !important")
+                                table
+                                    tbody
+                                        tr
+                                            td.menu-symbol-container
+                                                span.menu-symbol.symbol-100 \[\alpha\]
+                                            td.menu-symbol-container
+                                                span.menu-symbol.symbol-100 \[\beta\]
+                                            td.menu-symbol-container
+                                                span.menu-symbol.symbol-100 \[\varphi\]
+                .tab-content
+                    #regular.tab-pane.fade.show.active.table-responsive(role="tabpanel")
+                        table
+                            tr
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-outline-secondary.btn-block.button-symbol(data-op='fraction')
+                                                    | \[\frac{ \Box }{\Box}\]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-outline-secondary.btn-block.button-symbol(data-op='squareroot')
+                                                    | \[\sqrt{\Box}\]
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-outline-secondary.btn-block.button-symbol(data-op='power')
+                                                    | \[ \power{\Box}{\Box} \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-outline-secondary.btn-block.button-symbol(data-op='root')
+                                                    | \[\sqrt[\Box]{\Box}\]
+                                
+                                        
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-outline-secondary.btn-block.button-symbol(data-op='parentheses')
+                                                    | \[ \left( \Box \right) \]
+                                            
+                                            
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-outline-secondary.btn-block.button-symbol(data-op='absolute')
+                                                    | \[ \left| \Box \right| \]
+                                            
+                
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='plus')
+                                                    | \[ + \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='substract')
+                                                    | \[ - \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='sdiv')
+                                                    | \[ / \]
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='multiply')
+                                                    | \[ \times \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='div')
+                                                    | \[ \div \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='pm')
+                                                    | \[ \pm \]
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='lt')
+                                                    | \[ < \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='leq')
+                                                    | \[ \leq \]
+                                            
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='eq')
+                                                    | \[ = \]
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='gt')
+                                                    | \[ > \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='geq')
+                                                    | \[ \geq \]
+                                            
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='neq')
+                                                    | \[ \neq \]
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='sin')
+                                                    | \[ \sin{ \Box } \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='tan')
+                                                    | \[ \tan{ \Box } \]
+                                        tr.button-symbol-row
+                                            
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='cos')
+                                                    | \[ \cos{\Box} \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='cot')
+                                                    | \[ \cot{\Box} \]
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='log')
+                                                    | \[ \log_{\Box}{\Box} \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='logdec')
+                                                    | \[ \log{\Box}  \]
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='plog')
+                                                    | \[ \log_{\Box}^{\Box}{\Box}  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='ln')
+                                                    | \[ \ln{\Box} \]
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='pbin')
+                                                    | \[ 2^{x} \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='xpbin')
+                                                    | \[ x^{2} \]
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='exp')
+                                                    | \[ \exp{\Box} \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='expx')
+                                                    | \[ \exp{x} \]
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='posinf')
+                                                    | \[ +\infty \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='pi')
+                                                    | \[ \mathrm{\pi} \]
+                                            
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='neqinf')
+                                                    | \[ -\infty \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='euler')
+                                                    | \[ \mathrm{e} \]
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-for-image(data-op='image')
+                                                    | \[ \mathrm{i} \]
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-for-image(data-op='angle')
+                                                    | \[ \angle \]
+                                            
+                    #sum_int.tab-pane.fade(role="tabpanel")
+                        table
+                            tr
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='ssum') \[\sum_{\Box = \Box}^{\Box}{\Box}\]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='pprod') \[\prod_{\Box = \Box}^{\Box}{\Box}\]
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='sum') \(\sum_{\Box = \Box}^{\Box}{\Box}\)
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='prod') \(\prod_{\Box = \Box}^{\Box}{\Box}\)
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='iint') \[\int_{\Box}^{\Box}{\Box\mathrm{d}{\Box}}\]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='iinfint') \[\int{\Box}\mathrm{d}{\Box}\]
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='int') \(\int_{\Box}^{\Box}{\Box\mathrm{d}{\Box}}\)
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='infint') \(\int{\Box}\mathrm{d}{\Box}\)
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='limit') \[ \limit{\Box}{\Box}{\Box} \]
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='limitn') \[ \limitn{\Box} \]
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='fderi') \[ \fderi{\Box}{\Box}  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='fnderi') \[ \fnderi{\Box}{\Box}{\Box}  \]
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='deri') \[ \deri{\Box}  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='nderi') \[ \nderi{\Box}{\Box}  \]
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='log')
+                                                    | \[ \log_{\Box}{\Box} \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='logdec')
+                                                    | \[ \log{\Box}  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='ln')
+                                                    | \[ \ln{\Box} \]
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='plog')
+                                                    | \[ \log_{\Box}^{\Box}{\Box}  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='plogdec')
+                                                    | \[ \log^{\Box}{\Box} \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op='pln')
+                                                    | \[ \ln^{\Box}{\Box} \]
+                    #equation.tab-pane.fade(role="tabpanel")
+                        table
+                            tr
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op="eqsys")
+                                                    | \[
+                                                    | \left\{
+                                                    | \begin{array}{l}
+                                                    | \Box \\
+                                                    | \Box \\
+                                                    | \Box
+                                                    | \end{array}
+                                                    | \right.
+                                                    | \]
+                                                
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol(data-op="eqcase")
+                                                    | \[
+                                                    | \left[
+                                                    | \begin{array}{l}
+                                                    | \Box \\
+                                                    | \Box \\
+                                                    | \Box
+                                                    | \end{array}
+                                                    | \right.
+                                                    | \]
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-outline-secondary.btn-block.button-symbol(data-op='parentheses')
+                                                    | \[ \left( \Box \right) \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-outline-secondary.btn-block.button-symbol(data-op='bracket')
+                                                    | \[ \left[ \Box \right] \]
+                                            
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-outline-secondary.btn-block.button-symbol(data-op='brace')
+                                                    | \[ \left\{ \Box \right\} \]
+                    #greek_letter.tab-pane.fade(role="tabpanel")
+                        table
+                            tr
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='alpha') \[ \alpha  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='beta') \[ \beta  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='gamma') \[ \gamma  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='delta') \[ \delta  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='varepsilon') \[ \varepsilon \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='zeta') \[ \zeta \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='eta') \[ \eta \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='vartheta') \[ \vartheta \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='iota') \[ \iota \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='varkappa') \[ \varkappa \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='lambda') \[ \lambda \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='mu') \[ \mu \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='nu') \[ \nu \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='xi') \[ \xi  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='pi') \[ \pi  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='varrho') \[ \varrho \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='sigma') \[ \sigma  \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='tau') \[ \tau  \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='upsilon') \[ \upsilon  \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='varphi') \[ \varphi  \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='chi') \[ \chi  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='psi') \[ \psi  \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='omega') \[ \omega  \]    
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                            td.button-symbol-container(align='center')
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='Gamma') \[ \Gamma  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='Delta') \[ \Delta  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='epsilon') \[ \epsilon  \]
+                                            td.button-symbol-container(align='center')
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='Theta') \[ \Theta  \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='theta') \[ \theta  \] 
+                                            td.button-symbol-container(align='center')
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='kappa') \[ \kappa  \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='Lambda') \[ \Lambda  \]
+                                            td.button-symbol-container(align='center')
+                                            td.button-symbol-container(align='center')
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='Xi') \[ \Xi  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='rho') \[ \rho  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='Sigma') \[ \Sigma  \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='varsigma') \[ \varsigma  \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='Upsilon') \[ \Upsilon  \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='phi') \[ \phi  \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='Phi') \[ \Phi  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='Psi') \[ \Psi  \] 
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='Omega') \[ \Omega  \]
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-default.button-symbol.button-greek(data-op='varpi') \[ \varpi  \]  
+                                td.button-symbol-area
+                                    table
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-outline-secondary.btn-block.button-symbol(data-op='subscript')
+                                                    | \[ \subscript{ \Box }{\Box}\]
+                                            
+                                        tr.button-symbol-row
+                                            td.button-symbol-container(align='center')
+                                                a.btn.btn-outline-secondary.btn-block.button-symbol(data-op='psubscript')
+                                                    | \[ \psubscript{\Box}{\Box}{\Box} \]
+                #MathOutputBox
+                    #MathOutput
+                        | $$ \class{blinking-cursor}{|} $$
+                    textarea#virtual-input.form-control
+                    if editor === false
+                        button#calculate.btn.btn-outline-secondary(type="button")
+                            span.s-24 =
+                        button#sd.btn.btn-outline-secondary(type="button")
+                            span.s-12 S \( \Leftrightarrow \) D
+                    button#ac.btn.btn-outline-secondary(type="button")
+                        span.s-12 AC
+                    .right-bottom-container
+                        #realmode
+                            label.left-label Số phức
+                            input.real-mode-toggle(type="checkbox", checked)
+                            label.right-label Số thực
+                        #anglemode
+                            label.left-label Độ
+                            input.angle-mode-toggle(type="checkbox" checked)
+                            label.right-label Radian
+                if (editor === false)
+                    #MathResultBox
+                        #MathResult
+                            | $$ $$
+                        #loading-for-result.text-center
+                            img(src="/dist/layout/home/img/basic/loading.svg", alt="Loading...")
+                                
+block style
+    link(rel="stylesheet", href="/components/switchery/dist/switchery.min.css")
+    link(rel="stylesheet", href="/components/sweetalert2/dist/sweetalert2.min.css")
+    link(rel="stylesheet", href="/dist/pages/calculator/style/index.min.css")
+
+block script
+    script(src="/components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="/components/bootbox/bootbox.min.js")
+    script(src="/components/bootstrap-notify/bootstrap-notify.min.js")
+    script(src="/components/switchery/dist/switchery.min.js")
+    script(src="/components/nearley/lib/nearley.js")
+    script(src="/components/sweetalert2/dist/sweetalert2.all.min.js")
+    script(src="/components/core/core.min.js")
+    script(src="/dist/pages/calculator/script/kogida.min.js")
+    script(src="/dist/pages/calculator/script/index.min.js")
+

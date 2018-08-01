@@ -1,0 +1,243 @@
+extends ../../layout/dashboard/index
+
+block content-header
+    h1 Tạo kỳ thi thử chung
+    ol.breadcrumb
+        li
+            a(href="#")
+                i.fa.fa-dashboard
+                | Quản lý thi thử
+        li.active Tạo kỳ thi thử chung
+
+block content
+    if step == 1
+        .row
+            .col-md-12
+                .box.box-primary
+                    .box-header.with-border
+                        h3.box-title Cấu hình về kỳ thi
+                    form#form_step1(action="/admin/luu-thi-thu/buoc-1", method="get")
+                        .box-body
+                            .row
+                                .col-md-12
+                                    .form-group
+                                        label(for="input-examname") Tên kỳ thi (*)
+                                        input.form-control#input-examname(type="text", name="ExamName", autofocus, required)
+                            .row
+                                .col-md-4
+                                    .form-group
+                                        label(for="input-time") Thời gian (phút) (*)
+                                        input.form-control#input-time(type="number", name="Time", required, value="90")
+                                .col-md-4
+                                    .form-group
+                                        label(for="input-time") Hạn chót cho phép thi thử (*)
+                                        .input-group
+                                            span.input-group-addon
+                                                input(type="checkbox", name="UseDeadline", value="yes")
+                                            input.form-control#input-deadline(type="text", name="Deadline", value=moment().format("DD/MM/YYYY HH:mm"), data-inputmask='"mask": "99/99/9999 99:99"' data-mask)
+                                .col-md-4
+                                    .form-group
+                                        label(for="input-gradesubjectid") Chọn thông tin về môn học
+                                        select.form-control#input-gradesubjectid(type="number", name="GradeSubjectId", style="width: 100%; height: 100%;")
+                                            option(value="-1", selected) Chọn thông tin về môn học và khối/ lớp tương ứng
+                                            each gradeSubject, index in gradeSubjectList
+                                                option(value=gradeSubject.Id) Khối/ lớp: #{gradeSubject.grade.GradeName} - Môn học: #{gradeSubject.subject.SubjectName}
+                            .row
+                                .col-md-3
+                                    .form-group
+                                        label(for="input-questionnumber") Số lượng câu hỏi nhập vào (*)
+                                        input.form-control#input-questionnumber(type="number", name="QuestionNumberInput", required, value="50")
+                                .col-md-3
+                                    .form-group
+                                        label(for="input-questionnumber") Số lượng câu hỏi dùng để thi (*)
+                                        input.form-control#input-questionnumber(type="number", name="QuestionNumber", required, value="50")
+                                .col-md-4
+                                    label(for="input-secret") Nhập mã bí mật
+                                    .input-group
+                                        span.input-group-addon
+                                            input(type="checkbox", name="UseSecret", value="yes")
+                                        input.form-control#input-secret(type="text", name="Secret")
+                                .col-md-2
+                                    .form-group
+                                        label(for="add-label") Thêm nhãn câu hỏi
+                                        br
+                                        button.btn.btn-primary#add-label(style="width: 100%", type="button") Thêm (+)
+                            .row.label-container
+                                .col-md-7
+                                    .form-group
+                                        label Nhãn câu hỏi
+                                        input.form-control(type="text", name="QuestionLabel")
+                                .col-md-4
+                                    .form-group
+                                        label Số lượng tương ứng
+                                        input.form-control(type="number", name="QuestionNumberWithLabel", value="0")
+                                .col-md-1
+                                    .form-group
+                                        label Xóa
+                                        br
+                                        button.btn.btn-danger.remove-label(type="button", style="width: 100%") 
+                                            i.fa.fa-remove
+                        .box-footer.text-center
+                            button.btn.btn-primary(type="submit") Lưu cấu hình
+    else if step == 2
+        .row
+            .col-md-12
+                .box.box-primary
+                    .box-header.with-border
+                        h3.box-title Soạn thảo câu hỏi
+                        input#examInfo(type="hidden", value=JSON.stringify(exam))
+                    .box-body
+                        - var structure = JSON.parse(exam.Structure)
+                        .row
+                            .col-md-4.text-center
+                                button.btn.btn-primary#previous(type="button") Câu hỏi trước 
+                            .col-md-4
+                                - var QuestionNumberInput = JSON.parse(exam.Structure).QuestionNumberInput
+                                select#questionList.form-control(style="width: 100%;")
+                                    - for (var index = 0; index < Number(QuestionNumberInput); index++)
+                                        option(value=index, selected=(index == 0)) Câu hỏi số #{index + 1}
+                            .col-md-4.text-center
+                                button.btn.btn-primary#next(type="button") Câu hỏi sau
+                        hr
+                        - var QuestionList = JSON.parse(exam.QuestionList)
+                        .row
+                            .col-md-12.pull-right-container
+                                button#open_editor.btn.btn-info.pull-right(type="button") Mở công cụ soạn thảo
+                        .row
+                            .col-md-12
+                                if QuestionList == null
+                                    form#form_step2(action="/admin/luu-thi-thu/buoc-2", method="post", enctype="multipart/form-data")
+                                        input(type="hidden", name="ExamId", value=exam.ExamId)
+                                        - for (var index = 0; index < Number(QuestionNumberInput); index++)
+                                            .question-container.row(class=(index == 0 ? "show" : "hidden"), data-index=index)
+                                                .col-md-12
+                                                    h4 Câu hỏi số #{index + 1}
+                                                .col-md-12
+                                                    .form-group
+                                                        label Nội dung câu hỏi
+                                                        br
+                                                        textarea(name="content_" + index, rows='5', style="width:100%")
+                                                if structure.QuestionWithLabelAndNumberList.length > 0
+                                                    .col-md-12
+                                                        .form-group
+                                                            label Chọn nhãn cho câu hỏi
+                                                            select.form-control(name="label_" + index, style="width: 100%")
+                                                                each node, index in structure.QuestionWithLabelAndNumberList
+                                                                    option(value=node.label, selected=(index == 0))=node.label
+                                                .col-md-6
+                                                    .form-group
+                                                        label Các đáp án
+                                                        .input-group
+                                                            span.input-group-addon
+                                                                input(type="radio", name="issolution_" + index, value="0", checked="checked")
+                                                            input.form-control(type="text", name="solutiontext_" + index)
+                                                        .input-group
+                                                            span.input-group-addon
+                                                                input(type="radio", name="issolution_" + index, value="1")
+                                                            input.form-control(type="text", name="solutiontext_" + index)
+                                                        .input-group
+                                                            span.input-group-addon
+                                                                input(type="radio", name="issolution_" + index, value="2")
+                                                            input.form-control(type="text", name="solutiontext_" + index)
+                                                        .input-group
+                                                            span.input-group-addon
+                                                                input(type="radio", name="issolution_" + index, value="3")
+                                                            input.form-control(type="text", name="solutiontext_" + index)
+                                                    .form-group
+                                                        label Cho phép đảo đáp án
+                                                        input(type="checkbox", style="margin-left: 5px;", name="allowrandom_" + index, checked)
+                                                    .form-group
+                                                        label Số đáp án tối đa hiển thị trên một dòng
+                                                        input.form-control(type="number", name="maxsolutioninrow_" + index, value="4")
+                                                .col-md-6
+                                                    .form-group
+                                                        label Link các hình ảnh sử dụng
+                                                        input.form-control(type="text", name="imglink_" + index)
+                                                        input.form-control(type="text", name="imglink_" + index)
+                                                        input.form-control(type="text", name="imglink_" + index)
+                                                        input.form-control(type="text", name="imglink_" + index)
+
+                                                    .form-group
+                                                        label Số hình ảnh tối đa hiển thị trên một dòng
+                                                        input.form-control(type="number", name="maximginrow_" + index, value="4")
+                                        .row
+                                            .col-md-12.text-center
+                                                button.btn.btn-primary(type="submit") Lưu đề thi
+                                else
+                                    form#form_step2(action="/admin/luu-thi-thu/buoc-2", method="post", enctype="multipart/form-data")
+                                        input(type="hidden", name="ExamId", value=exam.ExamId)
+                                        - for (var index = 0; index < Number(QuestionNumberInput); index++)
+                                            .question-container.row(class=(index == 0 ? "show" : "hidden"), data-index=index)
+                                                .col-md-12
+                                                    h4 Câu hỏi số #{index + 1}
+                                                .col-md-12
+                                                    .form-group
+                                                        label Nội dung câu hỏi
+                                                        br
+                                                        textarea(name="content_" + index, rows='5', style="width:100%")!= QuestionList[index].Content
+                                                if structure.QuestionWithLabelAndNumberList.length > 0
+                                                    .col-md-12
+                                                        .form-group
+                                                            label Chọn nhãn cho câu hỏi
+                                                            select.form-control(name="label_" + index, style="width: 100%")
+                                                                each node, index2 in structure.QuestionWithLabelAndNumberList
+                                                                    option(value=node.label, selected=(node.label === QuestionList[index].Label))=node.label
+                                                .col-md-6
+                                                    .form-group
+                                                        label Các đáp án
+                                                        - for (var index2 = 0; index2 < 4; index2++)
+                                                            .input-group
+                                                                span.input-group-addon
+                                                                    if QuestionList[index].SolutionList[index2].solution
+                                                                        input(type="radio", name="issolution_" + index, value=index2, checked)
+                                                                    else
+                                                                        input(type="radio", name="issolution_" + index, value=index2)
+                                                                input.form-control(type="text", name="solutiontext_" + index, value=QuestionList[index].SolutionList[index2].text)
+                                                    .form-group
+                                                        label Cho phép đảo đáp án
+                                                        if (QuestionList[index].AllowRandom)
+                                                            input(type="checkbox", style="margin-left: 5px;", name="allowrandom_" + index, checked)
+                                                        else
+                                                            input(type="checkbox", style="margin-left: 5px;", name="allowrandom_" + index)
+                                                    .form-group
+                                                        label Số đáp án tối đa hiển thị trên một dòng
+                                                        input.form-control(type="number", name="maxsolutioninrow_" + index, value=QuestionList[index].MaxSolutionInRow)
+                                                .col-md-6
+                                                    .form-group
+                                                        label Link các hình ảnh sử dụng
+                                                        - for (var index2 = 0; index2 < 4; index2++)
+                                                            input.form-control(type="text", name="imglink_" + index, value=(QuestionList[index].ImageList[index2] ? QuestionList[index].ImageList[index2] : ""))
+                                                            
+
+                                                    .form-group
+                                                        label Số hình ảnh tối đa hiển thị trên một dòng
+                                                        input.form-control(type="number", name="maximginrow_" + index, value=QuestionList[index].MaxImageInRow)
+                                        .row
+                                            .col-md-12.text-center
+                                                button.btn.btn-primary(type="submit") Lưu đề thi   
+                                
+block style
+    link(rel="stylesheet", href="/components/select2/dist/css/select2.min.css")
+    link(rel="stylesheet", href="/components/sweetalert2/dist/sweetalert2.min.css")
+    link(rel="stylesheet", href="/components/datatables.net-bs/css/dataTables.bootstrap.min.css")
+    link(rel="stylesheet", href="/components/datatables.net/extensions/buttons/css/buttons.bootstrap.min.css")
+    link(rel="stylesheet", href="/components/timepicker/bootstrap-timepicker.min.css")
+    link(rel="stylesheet", href="/dist/pages/admin-exam-general/style/index.min.css")
+
+block script
+    script(src="/components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="/components/datatables.net/js/jquery.dataTables.min.js")
+    script(src="/components/datatables.net-bs/js/dataTables.bootstrap.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/dataTables.buttons.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/buttons.bootstrap.min.js")
+    script(src="/components/moment/min/moment.min.js")
+    script(src="/components/select2/dist/js/select2.full.min.js")
+    script(src="/components/select2/dist/js/i18n/vi.js")
+    script(src="/components/input-mask/jquery.inputmask.js")
+    script(src="/components/input-mask/jquery.inputmask.date.extensions.js")
+    script(src="/components/input-mask/jquery.inputmask.extensions.js")
+    script(src="/components/timepicker/bootstrap-timepicker.min.js")
+    script(src="/components/ckeditor/ckeditor.js")
+
+    script(src="/components/sweetalert2/dist/sweetalert2.min.js")
+    script(src="/dist/pages/admin-exam-general/script/index.min.js")

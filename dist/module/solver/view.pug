@@ -1,0 +1,20 @@
+extends ../../layout/home/index_blue
+
+block content
+    section.solver-area
+        .container-fluid.text-black
+            .row
+                .col-md-12.text-center
+                    h3.font-weight-bold Giải phương trình, hệ phương trình
+                    p.font-italic Nhập đề bài cần giải bằng cách ấn vào khung bên dưới nhé!
+                    .col-md-8.mx-auto
+                        #InputBox
+                            #MathInput
+                                | $$ $$
+                    a.btn.btn-outline-primary#solve-button(href="#") Giải bài này       
+block style
+    link(rel="stylesheet", href="dist/pages/solver/style/index.min.css")
+
+block script
+    script(src="components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="dist/pages/solver/script/index.min.js")

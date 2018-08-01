@@ -1,0 +1,66 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const GradeService_1 = require("../../service/database/GradeService");
+const GrammarService_1 = require("../../service/grammar/GrammarService");
+const Tree_1 = require("../../service/math/Tree");
+const FunctionExplorerService_1 = require("../../service/math/FunctionExplorerService");
+const TexGenerator_1 = require("../../service/result/TexGenerator");
+const TexRender_1 = require("../../service/result/TexRender");
+const DiagramService_1 = require("../../service/math/DiagramService");
+class FunctionExplorerController {
+    static route(router) {
+        let gradeService = new GradeService_1.default();
+        router.get("/khao-sat-ham-so", async function (req, res) {
+            res.render("../module/function-explorer/view", {
+                gradeList: await gradeService.findAll(),
+                functionTex: null,
+                result: null
+            });
+        });
+        router.get("/bai-giai-khao-sat", async function (req, res) {
+            var latexString = req.query.tex;
+            var jsonTree = await GrammarService_1.default.getTreeFromLatex(latexString);
+            var Tree = new Tree_1.default(jsonTree);
+            let variablesJSON = Tree.findOutVariables().map(x => x.value).filter((value, index, array) => array.indexOf(value) == index);
+            let result = null;
+            result = await FunctionExplorerService_1.default.FunctionExplorer(jsonTree, variablesJSON);
+            if (result["classification"] === "linearfunction") {
+                let positive = result["result"]["a"]["sign"] === "pos";
+                result["result"]["considering_change"] =
+                    await TexRender_1.default.ToBase64(TexGenerator_1.default.GenerateConsideringChangeTableForLinerFunction(positive));
+            }
+            else if (result["classification"] === "quadraticfunction") {
+                let positive = result["result"]["a"]["sign"] === "pos";
+                result["result"]["considering_change"] =
+                    await TexRender_1.default.ToBase64(TexGenerator_1.default.GenerateConsideringChangeTableForQuadraticFunction(positive, result["result"]["I"]));
+            }
+            res.render("../module/function-explorer/view", {
+                gradeList: await gradeService.findAll(),
+                functionTex: req.query["tex"],
+                classification: result["classification"],
+                result: result["result"]
+            });
+        });
+<<<<<<< HEAD
+        router.post("/api/ve-do-thi", async function (req, res) {
+            var data = req.body;
+            var result = await DiagramService_1.default.getBase64(data.diagramInput, data.classification);
+            res.send(result);
+=======
+        router.post("/api/ve-bang-bien-thien", async function (req, res) {
+            var result = JSON.parse(req.body["result"]);
+            var classfication = req.body["classification"];
+            var message = null;
+            console.log(result);
+            if (classfication === "cubicfunction") {
+                message = {
+                    status: 200,
+                    base64: await TexRender_1.default.ToBase64(TexGenerator_1.default.GenerateConsideringChangeTableForCubicFunction(result["considering_change"], result["deri"]["root"], result["val"]))
+                };
+            }
+            res.json(message);
+>>>>>>> a9cbf4c20581f99121ca7175b28148873bd5e773
+        });
+    }
+}
+exports.default = FunctionExplorerController;

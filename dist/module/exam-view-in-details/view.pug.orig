@@ -1,0 +1,205 @@
+<<<<<<< HEAD
+extends ../../layout/home/index_white
+
+block fixed
+    .countdown.text-white.p-2.red.lighten-1
+        i.icon-time-is-money-1
+        span.pl-1 Thời gian còn lại: 
+        span#clock.s-24.text-bold
+
+block content
+    .search-section
+        .container
+            .paper-card
+                if step == 1
+                    .row
+                        .col-md-12.text-center.text-bold
+                            h3 THÔNG TIN ĐỀ THI
+                            br
+                            h5
+                                | Tên kỳ thi: 
+                                strong #{exam.ExamName}
+                            h5
+                                | Thời gian làm bài: 
+                                strong #{exam.Time} phút
+                            br
+                            a.btn.btn-primary(href="/lam-bai-thi/buoc-2?mabaithi=" + exam.ExamId) Vào làm bài
+                else if step == 2
+                    input(type="hidden", value=exam.Time, name="Time")
+                    form(action="/nop-bai", method="post", enctype="multipart/form-data")
+                        
+                        .row
+                            .col-md-12.text-center.text-bold
+                                h3 
+                                    strong NỘI DUNG ĐỀ THI
+                                hr
+                                
+                        each question, index in ProcessedQuestionList
+                            .question-container
+                                .row.question-content
+                                    .col-md-12
+                                        strong.question-content-header 
+                                            u Câu #{index + 1}: 
+                                    .col-md-12
+                                        .question-content-body!= question.Content
+                                .solution-content
+                                    - var label = ["A", "B", "C", "D"]
+                                    .row
+                                        if (question.MaxSolutionInRow == 1)
+                                            each solution, index2 in question.SolutionList
+                                                .col-md-12.solution.pl-4
+                                                    .solution-radio
+                                                        if index2 == 0
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id, checked)
+                                                        else
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id)
+                                                    .solution-text
+                                                        strong #{label[index2]}. 
+                                                        | #{solution.text}
+                                        else if (question.MaxSolutionInRow == 2)
+                                            each solution, index2 in question.SolutionList
+                                                .col-md-6.solution.pl-4
+                                                    .solution-radio
+                                                        if index2 == 0
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id, checked)
+                                                        else
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id)
+                                                    .solution-text
+                                                        strong #{label[index2]}. 
+                                                        | #{solution.text}
+                                        else if (question.MaxSolutionInRow == 3)
+                                            each solution, index2 in question.SolutionList
+                                                .col-md-4.solution.pl-4
+                                                    .solution-radio
+                                                        if index2 == 0
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id, checked)
+                                                        else
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id)
+                                                    .solution-text
+                                                        strong #{label[index2]}. 
+                                                        | #{solution.text}
+                                        else if (question.MaxSolutionInRow == 4)
+                                            each solution, index2 in question.SolutionList
+                                                .col-md-3.solution.pl-4
+                                                    .solution-radio
+                                                        if index2 == 0
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id, checked)
+                                                        else
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id)
+                                                    .solution-text
+                                                        strong #{label[index2]}. 
+                                                        | #{solution.text}
+                        .row
+                            .col-md-12.text-center.p-t-10
+                                input(type="hidden", value=exam.ExamId, name="madethi")
+                                input(type="hidden", value=JSON.stringify(ProcessedQuestionList), name="dethi")
+                                button.btn.btn-primary(type="submit") Nộp bài                    
+                else if step == 3
+                    .row
+                        .col-md-12.text-center.text-bold
+                            h3
+                                strong KẾT QUẢ LÀM BÀI
+                            hr
+                    .row
+                        .col-md-1
+                        .col-md-10
+                            .row
+                                .col-md-4
+                                    h5 Số lượng câu đúng: 
+                                        strong #{ChoiceList.filter((x) => x.Correct).length}
+                                .col-md-4
+                                    h5 Tổng số câu hỏi: 
+                                        strong #{ChoiceList.length}
+                                .col-md-4
+                                    h5 Tỉ lệ đạt: 
+                                        strong #{Math.round(ChoiceList.filter((x) => x.Correct).length / ChoiceList.length * 100)}%
+                        .col-md-1
+                    each question, index in ProcessedQuestionList
+                            .question-container
+                                .row.question-content
+                                    .col-md-12
+                                        strong.question-content-header 
+                                            u Câu #{index + 1}: 
+                                    .col-md-12
+                                        .question-content-body!= question.Content
+                                .solution-content
+                                    - var label = ["A", "B", "C", "D"]
+                                    .row
+                                        if (question.MaxSolutionInRow == 1)
+                                            each solution, index2 in question.SolutionList
+                                                .col-md-12.solution.pl-4
+                                                    .solution-radio
+                                                        -var choice = ChoiceList.find((x) => x.QuestionId == question.QuestionId)
+                                                        if choice.Choice == solution.id
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id, checked)
+                                                        else
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id)
+                                                    .solution-text
+                                                        if solution.solution
+                                                            strong.text-red #{label[index2]}. 
+                                                            strong.text-red #{solution.text}
+                                                        else
+                                                            strong #{label[index2]}. 
+                                                            span #{solution.text}
+                                        else if (question.MaxSolutionInRow == 2)
+                                            each solution, index2 in question.SolutionList
+                                                .col-md-6.solution.pl-4
+                                                    .solution-radio
+                                                        -var choice = ChoiceList.find((x) => x.QuestionId == question.QuestionId)
+                                                        if choice.Choice == solution.id
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id, checked)
+                                                        else
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id)
+                                                    .solution-text
+                                                        if solution.solution
+                                                            strong.text-red #{label[index2]}. 
+                                                            strong.text-red #{solution.text}
+                                                        else
+                                                            strong #{label[index2]}. 
+                                                            span #{solution.text}
+                                        else if (question.MaxSolutionInRow == 3)
+                                            each solution, index2 in question.SolutionList
+                                                .col-md-4.solution.pl-4
+                                                    .solution-radio
+                                                        -var choice = ChoiceList.find((x) => x.QuestionId == question.QuestionId)
+                                                        if choice.Choice == solution.id
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id, checked)
+                                                        else
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id)
+                                                    .solution-text
+                                                        if solution.solution
+                                                            strong.text-red #{label[index2]}. 
+                                                            strong.text-red #{solution.text}
+                                                        else
+                                                            strong #{label[index2]}. 
+                                                            span #{solution.text}
+                                        else if (question.MaxSolutionInRow == 4)
+                                            each solution, index2 in question.SolutionList
+                                                .col-md-3.solution.pl-4
+                                                    .solution-radio
+                                                        -var choice = ChoiceList.find((x) => x.QuestionId == question.QuestionId)
+                                                        if choice.Choice == solution.id
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id, checked)
+                                                        else
+                                                            input(type="radio", name="lc_" + question.QuestionId, value=solution.id)
+                                                    .solution-text
+                                                        if solution.solution
+                                                            strong.text-red #{label[index2]}. 
+                                                            strong.text-red #{solution.text}
+                                                        else
+                                                            strong #{label[index2]}. 
+                                                            span #{solution.text} 
+                        
+
+                
+block style
+    link(rel="stylesheet", href="/dist/pages/exam-view-in-details/style/index.min.css")
+block script
+    script(src="/components/mathjax/MathJax.js?config=TeX-AMS_HTML-full,local/local")
+    script(src="/components/moment/min/moment.min.js")
+    script(src="/components/countdown/jquery.countdown.min.js")
+    script(src="/dist/pages/exam-view-in-details/script/index.min.js")
+
+
+=======
+>>>>>>> d9bbe119ba4f2329bf971a2c6c86ae5b27bc7ef3

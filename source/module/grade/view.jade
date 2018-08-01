@@ -1,0 +1,43 @@
+extends ../../layout/dashboard/index
+
+block content-header
+    h1 Quản lý khối/ lớp học
+    ol.breadcrumb
+        li
+            a(href="#")
+                i.fa.fa-dashboard
+                | Quản lý môn học, khối lớp
+        li.active Quản lý khối lớp
+block content
+    .row
+        .col-md-12
+            .box.box-primary
+                .box-header.with-border
+                    h3.box-title Danh sách các khối/ lớp đang tồn tại trong hệ thống
+                .box-body
+                    table.table.table-bordered.table-hover
+                        thead
+                            th.text-center Mã khối/ lớp
+                            th.text-center Tên khối lớp
+                            th.text-center Thao tác
+                        tbody
+                            each grade, index in gradeList
+                                tr
+                                    td.text-center= grade.GradeId
+                                    td.text-center= grade.GradeName
+                                    td.text-center
+                                        button.btn.btn-sm.btn-info.edit(type="button", data-gradeid= grade.GradeId) Sửa
+                                        button.btn.btn-sm.btn-danger.remove(type="button", data-gradeid= grade.GradeId) Xóa
+                    
+block style
+    link(rel="stylesheet", href="/components/datatables.net-bs/css/dataTables.bootstrap.min.css")
+    link(rel="stylesheet", href="/components/datatables.net/extensions/buttons/css/buttons.bootstrap.min.css")
+    link(rel="stylesheet", href="/dist/pages/grade/style/index.min.css")
+
+block script
+    script(src="/components/datatables.net/js/jquery.dataTables.min.js")
+    script(src="/components/datatables.net-bs/js/dataTables.bootstrap.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/dataTables.buttons.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/buttons.bootstrap.min.js")
+    script(src="components/bootbox/bootbox.min.js")
+    script(src="/dist/pages/grade/script/index.min.js")

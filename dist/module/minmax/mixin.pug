@@ -1,0 +1,27 @@
+mixin displaySet(set)
+    if (set.hasOwnProperty("open_set"))
+        | \displaystyle \left(#{set["open_set"]["min"]}; #{set["open_set"]["max"]}\right)
+    else if (set.hasOwnProperty("closed_set"))
+        | \displaystyle \left[#{set["closed_set"]["min"]}; #{set["closed_set"]["max"]}\right]           
+    else if (set.hasOwnProperty("left_open_set"))
+        | \displaystyle \left(#{set["left_open_set"]["min"]}; #{set["left_open_set"]["max"]}\right]
+    else if (set.hasOwnProperty("right_open_set"))
+        | \displaystyle \left[#{set["right_open_set"]["min"]}; #{set["right_open_set"]["max"]}\right)
+    else if (set.hasOwnProperty("unions"))
+        | \displaystyle \left(
+        each setElem, index in set.unions
+            if index == set.unions.length - 1
+                +displaySet(setElem)
+            else
+                +displaySet(setElem)
+                | \cup
+        | \right)
+    else if (set.hasOwnProperty("intersections"))
+        | \displaystyle \left(
+        each setElem, index in set.intersections
+            if index == set.intersections.length - 1
+                +displaySet(setElem)
+            else
+                +displaySet(setElem)
+                | \cap
+        | \right)

@@ -1,0 +1,43 @@
+extends ../../layout/dashboard/index
+
+block content-header
+    h1 Quản lý môn học
+    ol.breadcrumb
+        li
+            a(href="#")
+                i.fa.fa-dashboard
+                | Quản lý môn học, khối lớp
+        li.active Quản lý môn học
+block content
+    .row
+        .col-md-12
+            .box.box-primary
+                .box-header.with-border
+                    h3.box-title Danh sách các môn học đang tồn tại trong hệ thống
+                .box-body
+                    table.table.table-bordered.table-hover
+                        thead
+                            th.text-center Mã môn học
+                            th.text-center Tên môn học
+                            th.text-center Thao tác
+                        tbody
+                            each subject, index in subjectList
+                                tr
+                                    td.text-center= subject.SubjectId
+                                    td.text-center= subject.SubjectName
+                                    td.text-center
+                                        button.btn.btn-sm.btn-info.edit(type="button", data-subjectid= subject.SubjectId) Sửa
+                                        button.btn.btn-sm.btn-danger.remove(type="button", data-subjectid= subject.SubjectId) Xóa
+                    
+block style
+    link(rel="stylesheet", href="/components/datatables.net-bs/css/dataTables.bootstrap.min.css")
+    link(rel="stylesheet", href="/components/datatables.net/extensions/buttons/css/buttons.bootstrap.min.css")
+    link(rel="stylesheet", href="/dist/pages/subject/style/index.min.css")
+
+block script
+    script(src="/components/datatables.net/js/jquery.dataTables.min.js")
+    script(src="/components/datatables.net-bs/js/dataTables.bootstrap.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/dataTables.buttons.min.js")
+    script(src="/components/datatables.net/extensions/buttons/js/buttons.bootstrap.min.js")
+    script(src="components/bootbox/bootbox.min.js")
+    script(src="/dist/pages/subject/script/index.min.js")

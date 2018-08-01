@@ -1,0 +1,186 @@
+doctype html
+html(lang="vi")
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    title Kogida - Quản lý nội dung
+    meta(content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no', name='viewport')
+    link(rel='stylesheet', href='/components/bootstrap/dist/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/components/font-awesome/css/font-awesome.min.css')
+    link(rel='stylesheet', href='/components/Ionicons/css/ionicons.min.css')
+    link(rel='stylesheet', href='/dist/layout/dashboard/style/theme/theme.min.css')
+    link(rel='stylesheet', href='/dist/layout/dashboard/style/theme/skins/skin-red-light.min.css')
+    block style
+
+    //script(src='https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js')
+    //script(src='https://oss.maxcdn.com/respond/1.4.2/respond.min.js')
+
+  body.hold-transition.skin-red-light.sidebar-mini
+    .wrapper
+      header.main-header
+        a.logo(href='/trang-chinh')
+          span.logo-mini
+            strong K
+          span.logo-lg
+            strong Kogida
+        nav.navbar.navbar-static-top
+          a.sidebar-toggle(href='#', data-toggle='push-menu', role='button')
+            span.sr-only Toggle navigation
+          //.navbar-custom-menu
+            ul.nav.navbar-nav
+              li.dropdown.user.user-menu
+                a.dropdown-toggle(href='#', data-toggle='dropdown')
+                  img.user-image(src='http://via.placeholder.com/160x160', alt='User Image')
+                  span.hidden-xs Alexander Pierce
+                ul.dropdown-menu
+                  li.user-header
+                    img.img-circle(src='http://via.placeholder.com/160x160', alt='User Image')
+                    p
+                      | Alexander Pierce - Web Developer
+                      small Member since Nov. 2012
+                  li.user-body
+                    .row
+                      .col-xs-4.text-center
+                        a(href='#') Followers
+                      .col-xs-4.text-center
+                        a(href='#') Sales
+                      .col-xs-4.text-center
+                        a(href='#') Friends
+                  li.user-footer
+                    .pull-left
+                      a.btn.btn-default.btn-flat(href='#') Profile
+                    .pull-right
+                      a.btn.btn-default.btn-flat(href='#') Sign out
+      aside.main-sidebar
+        section.sidebar
+          .user-panel
+            .pull-left.image
+              img.img-circle(src='http://via.placeholder.com/160x160', alt='User Image')
+            .pull-left.info
+              p #{userInfo.FamilyName} #{userInfo.GivenName}
+              a(href='#')
+                i.fa.fa-circle.text-success
+                |  Trực tuyến
+          //form.sidebar-form(action='#', method='get')
+            .input-group
+              input.form-control(type='text', name='q', placeholder='Search...')
+              span.input-group-btn
+                button#search-btn.btn.btn-flat(type='submit', name='search')
+                  i.fa.fa-search
+          
+          ul.sidebar-menu(data-widget='tree')
+            li.header Thanh công cụ
+            li.active.treeview
+              a(href="/trang-chinh")
+                i.fa.fa-dashboard
+                span Trang chủ
+            li.treeview
+              a(href="#")
+                i.fa.fa-diamond
+                span Quản lý môn học, khối
+                span.pull-right-container
+                  i.fa.fa-angle-left.pull-right
+              ul.treeview-menu
+                li
+                  a(href="/quan-ly-mon-hoc")
+                    i.fa.fa-database
+                    | Quản lý môn học
+                li
+                  a(href="/quan-ly-khoi-lop")
+                    i.fa.fa-cubes
+                    | Quản lý khối lớp
+                li
+                  a(href="/phan-mon-cho-khoi")
+                    i.fa.fa-cogs
+                    | Phân môn học cho khối
+                li
+                  a(href="/thong-tin-ve-chuong")
+                    i.fa.fa-safari
+                    | Thông tin về chương
+                li
+                  a(href="/thong-tin-ve-bai-hoc")
+                    i.fa.fa-scissors
+                    | Thông tin bài học
+            
+            li.treeview
+              a(href="#")
+                i.fa.fa-github-alt
+                span Quản lý bài tập
+                span.pull-right-container
+                  i.fa.fa-angle-left.pull-right
+              ul.treeview-menu
+                li
+                  a(href="/them-bai-tap-moi")
+                    i.fa.fa-codepen
+                    | Thêm bài tập mới
+                li
+                  a(href="/thong-tin-bai-tap")
+                    i.fa.fa-camera
+                    | Thông tin bài tập
+            li.treeview
+              a(href="#")
+                i.fa.fa-taxi
+                span Quản lý thi thử
+                span.pull-right-container
+                  i.fa.fa-angle-left.pull-right
+              ul.treeview-menu
+                li
+                  a(href="/admin/de-thi-thu-cua-toi")
+                    i.fa.fa-amazon
+                    | Đề thi của tôi
+                li
+                  a(href="/admin/tao-thi-thu/buoc-1")
+                    i.fa.fa-puzzle-piece
+                    | Tạo đề thi thử
+            li.treeview
+              a(href="#")
+                i.fa.fa-tasks
+                span Quản lý cấu hình
+                span.pull-right-container
+                  i.fa.fa-angle-left.pull-right
+              ul.treeview-menu
+                li
+                  a(href="/quan-ly-chuc-nang")
+                    i.fa.fa-wrench
+                    | Quản lý chức năng
+                li
+                  a(href="/quan-ly-chuc-danh")
+                    i.fa.fa-bug
+                    | Quản lý chức danh
+                li
+                  a(href="/dvhc-viet-nam")
+                    i.fa.fa-map-marker
+                    | Cấu hình về địa chỉ
+            li.treeview
+              a(href="#")
+                i.fa.fa-address-book
+                span Quản lý tài khoản
+                span.pull-right-container
+                  i.fa.fa-angle-left.pull-right
+              ul.treeview-menu
+                li
+                  a(href="/cap-phat-tai-khoan")
+                    i.fa.fa-user-md
+                    | Cấp phát tài khoản
+                
+        
+      .content-wrapper
+        section.content-header
+          block content-header
+
+        section.content
+          block content
+        
+      footer.main-footer
+        .pull-right.hidden-xs
+          b Phiên bản
+          |  1.0.0
+        strong
+          | Bản quyền © 2017 - 2018 
+          a(href='http://bkan.vn') BKAN Team
+          | .
+      
+    script(src='/components/jquery/dist/jquery.min.js')
+    script(src='/components/bootstrap/dist/js/bootstrap.min.js')
+    script(src='/dist/layout/dashboard/script/theme/theme.min.js')
+    block script
