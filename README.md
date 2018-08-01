@@ -1,2 +1,2 @@
 # kogida
-See my project of kogida.com
+See my project of https://www.kogida.com
